@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://764b5nxbloj0"]
+
+[ext_resource type="PackedScene" uid="uid://b7rsmaso6f0jv" path="res://Ball.tscn" id="1_mqven"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wiaf0"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_lxm1k"]
+sky_material = SubResource("ProceduralSkyMaterial_wiaf0")
+
+[sub_resource type="Environment" id="Environment_atsvh"]
+background_mode = 2
+sky = SubResource("Sky_lxm1k")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xrv8i"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e8xom"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_qrjm4"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_atsvh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.14917, 0, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="RigidBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_xrv8i")
+
+[node name="PlaneFloor" type="MeshInstance3D" parent="."]
+transform = Transform3D(8.38921, 0, 0, 0, 1, 0, 0, 0, 6.94553, 0, -0.88504, 0)
+mesh = SubResource("PlaneMesh_e8xom")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="PlaneFloor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlaneFloor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_qrjm4")
+
+[node name="Ball" parent="." instance=ExtResource("1_mqven")]
+top_level = true
+linear_damp = 3.0
