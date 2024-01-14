@@ -3,7 +3,7 @@ extends Node3D
 @export var chunkSize = 100
 @export var terrain_height = 20
 @export var view_distance = 500
-@export var viewer :RigidBody3D
+@export var viewer :Node3D
 @export var chunk_mesh_scene : PackedScene
 @export var render_debug := false
 var viewer_position = Vector2()
