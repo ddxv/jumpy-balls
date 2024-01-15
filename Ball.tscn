@@ -1,24 +1,24 @@
 [gd_scene load_steps=7 format=3 uid="uid://b7rsmaso6f0jv"]
 
 [ext_resource type="Script" path="res://ball.gd" id="1_ptpcq"]
-[ext_resource type="Texture2D" uid="uid://d012hqcicsv11" path="res://icon.svg" id="2_a1afx"]
+[ext_resource type="Texture2D" uid="uid://d0xs7f40ag8qe" path="res://textures/blue_ball_pixel_art.jpeg" id="2_bfqv3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e8uyb"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_386sv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p4o65"]
-albedo_texture = ExtResource("2_a1afx")
+albedo_texture = ExtResource("2_bfqv3")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_pdw4n"]
 
 [node name="Ball" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 
 [node name="CameraRig" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2, 3)
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig"]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0)
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_e8uyb")
@@ -31,12 +31,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_p4o65")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
 shape = SubResource("SphereShape3D_pdw4n")
-
-[node name="TwistPivot" type="Node3D" parent="RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
-[node name="PitchPivot" type="Node3D" parent="RigidBody3D/TwistPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0)
 
 [node name="FloorCheck" type="RayCast3D" parent="."]
 target_position = Vector3(0, -1.5, 0)

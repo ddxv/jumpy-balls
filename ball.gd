@@ -10,7 +10,9 @@ var last_contact_count =0;
 
 var CameraRig;
 var FloorCheck;
+var rolling_force = 40
 
+var last_position
 
 
 
@@ -23,23 +25,15 @@ func _ready():
 	continuous_cd = true
 	set_contact_monitor(true)
 	set_max_contacts_reported (2)
-	#connect("body_entered", _on_body_entered)
 	var parent = get_parent()
 	CameraRig = parent.get_node("CameraRig")
 	CameraRig.top_level =true
 	FloorCheck = parent.get_node("FloorCheck")
 	FloorCheck.top_level = true
-	# Make sure FloorCheck raycast doesn't inherit Balls transforms,
-	# so that it doesn't rotate as the ball rolls
-	#$FloorCheck.set_as_toplevel(true)
-	
-	
-	 
+	last_position = global_transform.origin
 
-#func _on_body_exited(body:Node):
-	#print(body, " exited")
-	#
-	#
+	
+
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _physics_process(delta):
 	#var y_speed = 0
@@ -73,8 +67,7 @@ func _ready():
 	#print(motion)
 	#apply_central_force(motion *2* delta)
 #
-	#if global_transform.origin.y < -49:
-		#game_over()
+
 
 func game_over():
 	# Handle the game over state
@@ -82,13 +75,20 @@ func game_over():
 	get_tree().reload_current_scene()
 
 
-var rolling_force = 40
+
 
 
 func _physics_process(delta):
+	var camera_position: Vector3 = CameraRig.global_transform.origin
+	var ball_position: Vector3 = global_transform.origin
+	
+	var dir:Vector3 = camera_position.direction_to(ball_position)
+
+	var moving_dir:Vector3 = last_position.direction_to(ball_position)
+
 	CameraRig.global_transform.origin = lerp(
-		CameraRig.global_transform.origin, 
-		global_transform.origin, 0.1
+		camera_position, 
+		ball_position+Vector3(0,2,2), 1
 	)
 	# As the ball moves, move the raycast along with it
 	FloorCheck.global_transform.origin = global_transform.origin
@@ -104,9 +104,17 @@ func _physics_process(delta):
 
 	# When the ball is on the floor and the user presses jump button,
 	# add impulse moving the ball up.
-	if Input.is_action_just_pressed("jump") and FloorCheck.is_colliding():
-		print("jump")
-		apply_impulse(Vector3(), Vector3.UP*10000)
+	if Input.is_action_just_pressed("jump"):
+		if FloorCheck.is_colliding():
+			print("jump")
+			#apply_impulse(Vector3(), Vector3.UP*1000)
+			apply_central_impulse((moving_dir*100+Vector3(0,1,0)*100))
+		else:
+			print("air jump")
+			apply_central_impulse(dir*100)
+		
+	if global_transform.origin.y < -49:
+		game_over()
 
 
 
