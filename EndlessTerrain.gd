@@ -16,6 +16,7 @@ var last_visible_chunks = []
 func _ready():
 	#set the total chunks to be visible
 	chunksvisible = roundi(view_distance/chunkSize)
+	viewer = viewer.get_node("MyBall")
 	if render_debug:
 		set_wireframe()
 	updateVisibleChunk()
