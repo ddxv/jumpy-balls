@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://764b5nxbloj0"]
+[gd_scene load_steps=10 format=3 uid="uid://764b5nxbloj0"]
 
 [ext_resource type="PackedScene" uid="uid://b7rsmaso6f0jv" path="res://Ball.tscn" id="1_mqven"]
 [ext_resource type="Script" path="res://score.gd" id="2_k7pnr"]
@@ -52,6 +52,3 @@ view_distance = 2000
 viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("5_6v3y8")
 noise = SubResource("FastNoiseLite_niqrs")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-script = ExtResource("5_ci7ny")
