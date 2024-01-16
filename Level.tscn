@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://764b5nxbloj0"]
+[gd_scene load_steps=10 format=3 uid="uid://764b5nxbloj0"]
 
 [ext_resource type="PackedScene" uid="uid://b7rsmaso6f0jv" path="res://Ball.tscn" id="1_mqven"]
+[ext_resource type="Script" path="res://score.gd" id="2_k7pnr"]
 [ext_resource type="Script" path="res://EndlessTerrain.gd" id="4_k65ja"]
 [ext_resource type="PackedScene" uid="uid://xxbd64a50fk1" path="res://TerrainChunk.tscn" id="5_6v3y8"]
 
@@ -17,10 +18,13 @@ sky = SubResource("Sky_lxm1k")
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="Theme" id="Theme_680pe"]
+default_font_size = 44
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_niqrs"]
 frequency = 0.001
 
-[node name="Node3D" type="Node3D"]
+[node name="Level" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_atsvh")
@@ -31,11 +35,19 @@ environment = SubResource("Environment_atsvh")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
+[node name="ScoreLabel" type="RichTextLabel" parent="."]
+clip_contents = false
+offset_right = 40.0
+offset_bottom = 40.0
+theme = SubResource("Theme_680pe")
+autowrap_mode = 0
+script = ExtResource("2_k7pnr")
+
 [node name="InfiniteTerrain" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
 script = ExtResource("4_k65ja")
 chunkSize = 400
 terrain_height = 200
-view_distance = 1000
+view_distance = 2000
 viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("5_6v3y8")
 noise = SubResource("FastNoiseLite_niqrs")

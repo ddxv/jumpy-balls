@@ -14,6 +14,10 @@ var rolling_force = 40
 
 var last_position
 
+var score = 0
+
+var ball_position
+
 
 
 
@@ -75,12 +79,16 @@ func game_over():
 	get_tree().reload_current_scene()
 
 
+func _process(delta):
+	score = round(abs(ball_position.x) + abs(ball_position.z))
+	var ScoreLabel = get_node("/root/Level/ScoreLabel")
+	ScoreLabel.text = "Score: " + str(score)
 
 
 
 func _physics_process(delta):
 	var camera_position: Vector3 = CameraRig.global_transform.origin
-	var ball_position: Vector3 = global_transform.origin
+	ball_position = global_transform.origin
 	
 	var dir:Vector3 = camera_position.direction_to(ball_position)
 
@@ -112,6 +120,8 @@ func _physics_process(delta):
 		else:
 			print("air jump")
 			apply_central_impulse(dir*100)
+	if not FloorCheck.is_colliding():
+		apply_central_impulse(Vector3(0,-1,0))
 		
 	if global_transform.origin.y < -49:
 		game_over()
