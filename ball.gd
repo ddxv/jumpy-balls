@@ -24,9 +24,9 @@ func _ready():
 	set_contact_monitor(true)
 	set_max_contacts_reported(2)
 	var parent = get_parent()
-	camera_rig = parent.get_node("camera_rig")
+	camera_rig = parent.get_node("CameraRig")
 	camera_rig.top_level = true
-	floor_check = parent.get_node("floor_check")
+	floor_check = parent.get_node("FloorCheck")
 	floor_check.top_level = true
 	last_position = global_transform.origin
 
@@ -39,7 +39,7 @@ func game_over():
 
 func _process(_delta):
 	score = round(abs(ball_position.x) + abs(ball_position.z))
-	var score_label = get_node("/root/Level/score_label")
+	var score_label = get_node("/root/Level/ScoreLabel")
 	score_label.text = "Score: " + str(score)
 
 

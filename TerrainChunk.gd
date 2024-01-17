@@ -108,7 +108,7 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initai
 	#create Array Mesh from Data
 	a_mesh = surftool.commit()
 	gen_water(a_mesh, size)
-	gen_platform(a_mesh, size)
+	# gen_platform(a_mesh, size)
 	#assign Array Mesh to mesh
 	mesh = a_mesh
 	if set_collision:
@@ -124,10 +124,11 @@ func create_collision():
 	create_trimesh_collision()
 
 
+# # Why does this appear to be dead end?
 # #update chunk to check if near viewer
 # func update_chunk(view_pos: Vector2, max_view_dis):
 # 	var viewer_distance = position_coord.distance_to(view_pos)
-# 	var _is_visible = viewer_distance <= max_view_dis
+# 	var _my_is_visible = viewer_distance <= max_view_dis
 # 	#set_chunk_visibitility(_is_visible)
 
 

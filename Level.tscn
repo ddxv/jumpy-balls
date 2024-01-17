@@ -46,9 +46,8 @@ script = ExtResource("2_k7pnr")
 
 [node name="InfiniteTerrain" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
 script = ExtResource("4_k65ja")
-chunkSize = 400
+noise = SubResource("FastNoiseLite_niqrs")
 terrain_height = 200
 view_distance = 2000
 viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("5_6v3y8")
-noise = SubResource("FastNoiseLite_niqrs")

@@ -52,7 +52,7 @@ func update_visible_chunk():
 			if terrain_chunks.has(view_chunk_coord):
 				var ref = weakref(terrain_chunks[view_chunk_coord])
 				#if chunk exist update the chunk passing viewer_position and view_distance
-				terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
+				# terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
 				if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
 					terrain_chunks[view_chunk_coord].generate_terrain(
 						noise, view_chunk_coord, chunk_size, true
@@ -66,7 +66,7 @@ func update_visible_chunk():
 				var chunk: TerrainChunk = chunk_mesh_scene.instantiate()
 				add_child(chunk)
 				#set chunk parameters
-				chunk.Terrain_Max_Height = terrain_height
+				chunk.terrain_max_height = terrain_height
 				#set chunk world position
 				var pos = view_chunk_coord * chunk_size
 				var world_position = Vector3(pos.x, 0, pos.y)
