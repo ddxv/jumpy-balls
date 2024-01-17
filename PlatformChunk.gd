@@ -57,7 +57,7 @@ func generate_terrain(my_height: int, coords: Vector2, size: float, initailly_vi
 			var point_on_mesh = Vector3(percent.x - CENTER_OFFSET, 0, percent.y - CENTER_OFFSET)
 			#multiplay it by the Terrain size to get vertex position
 			var vertex = point_on_mesh * terrain_size
-			vertex.y = my_height 
+			vertex.y = my_height
 			#create UVs using percentage
 			var uv = Vector2()
 			uv.x = percent.x

@@ -1,6 +1,5 @@
 extends Node3D
 
-
 @export var viewer: Node3D
 @export var chunk_mesh_scene: PackedScene
 
