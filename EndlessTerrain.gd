@@ -40,13 +40,13 @@ func updateVisibleChunk():
 #		chunk.setChunkVisible(false)
 #	last_visible_chunks.clear()
 	#get grid position
-	var currentX = roundi(viewer_position.x / chunkSize)
-	var currentY = roundi(viewer_position.y / chunkSize)
+	var current_x = roundi(viewer_position.x / chunkSize)
+	var current_y = roundi(viewer_position.y / chunkSize)
 	#get all the chunks within visiblity range
 	for yOffset in range(-chunksvisible, chunksvisible):
 		for xOffset in range(-chunksvisible, chunksvisible):
 			#create a new chunk coordinate
-			var view_chunk_coord = Vector2(currentX - xOffset, currentY - yOffset)
+			var view_chunk_coord = Vector2(current_x - xOffset, current_y - yOffset)
 			#check if chunk was already created
 			if terrain_chunks.has(view_chunk_coord):
 				var ref = weakref(terrain_chunks[view_chunk_coord])
