@@ -37,7 +37,7 @@ func game_over():
 	get_tree().reload_current_scene()
 
 
-func _process(_delta):
+func _process(delta):
 	score = round(abs(ball_position.x) + abs(ball_position.z))
 	var score_label = get_node("/root/Level/ScoreLabel")
 	score_label.text = "Score: " + str(score)

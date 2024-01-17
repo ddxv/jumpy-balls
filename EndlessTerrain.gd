@@ -29,7 +29,7 @@ func set_wireframe():
 	get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
 
 
-func _process(_delta):
+func _process(delta):
 	viewer_position.x = viewer.global_position.x
 	viewer_position.y = viewer.global_position.z
 	update_visible_chunk()

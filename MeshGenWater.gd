@@ -9,10 +9,10 @@ func _ready():
 	gen_water()
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	if update:
-		gen_water()
+# # Called every frame. 'delta' is the elapsed time since the previous frame.
+# func _process(delta):
+# 	if update:
+# 		gen_water()
 
 
 func gen_water():
