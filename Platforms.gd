@@ -1,7 +1,8 @@
-class_name TerrainChunk
+class_name Platforms
 extends MeshInstance3D
 
 const CENTER_OFFSET = 0.5
+const DEATH_HEIGHT = -50
 
 #Terrain size
 @export_range(20, 400, 1) var terrain_size := 200
@@ -13,22 +14,21 @@ const CENTER_OFFSET = 0.5
 @export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
 @export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
 #2D position in world space
-var position_coord = Vector2()
-var grid_coord = Vector2()
 
 var set_collision = false
 
-var death_height = Globals.DEATH_HEIGHT
+var position_coord = Vector2()
+var grid_coord = Vector2()
 
 
-func gen_water(a_mesh: ArrayMesh, size: float):
+func gen_water(a_mesh: ArrayMesh, size: int):
 	#var a_mesh = ArrayMesh.new()
 	var vertices := PackedVector3Array(
 		[
-			Vector3(-size, death_height, -size),
-			Vector3(size, death_height, -size),
-			Vector3(size, death_height, size),
-			Vector3(-size, death_height, size),
+			Vector3(-size, DEATH_HEIGHT, -size),
+			Vector3(size, DEATH_HEIGHT, -size),
+			Vector3(size, DEATH_HEIGHT, size),
+			Vector3(-size, DEATH_HEIGHT, size),
 		]
 	)
 	var indices := PackedInt32Array([0, 1, 2, 0, 2, 3])
@@ -40,14 +40,14 @@ func gen_water(a_mesh: ArrayMesh, size: float):
 	mesh = a_mesh
 
 
-func gen_platform(a_mesh: ArrayMesh, size: float):
+func gen_platform(a_mesh: ArrayMesh, size: int):
 	var platform_size = size / 8
 	var vertices := PackedVector3Array(
 		[
-			Vector3(-platform_size, death_height / 2, -platform_size),
-			Vector3(platform_size, death_height / 2, -platform_size),
-			Vector3(platform_size, death_height / 2, platform_size),
-			Vector3(-platform_size, death_height / 2, platform_size),
+			Vector3(-platform_size, DEATH_HEIGHT / 2, -platform_size),
+			Vector3(platform_size, DEATH_HEIGHT / 2, -platform_size),
+			Vector3(platform_size, DEATH_HEIGHT / 2, platform_size),
+			Vector3(-platform_size, DEATH_HEIGHT / 2, platform_size),
 		]
 	)
 	var indices := PackedInt32Array([0, 1, 2, 0, 2, 3])
@@ -60,7 +60,7 @@ func gen_platform(a_mesh: ArrayMesh, size: float):
 
 
 func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initailly_visible: bool):
-	terrain_size = size
+	terrain_size = int(size)
 	#set 2D position in world space
 	grid_coord = coords
 	position_coord = coords * size
@@ -108,13 +108,13 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initai
 	#create Array Mesh from Data
 	a_mesh = surftool.commit()
 	gen_water(a_mesh, size)
-	# gen_platform(a_mesh, size)
+	gen_platform(a_mesh, size)
 	#assign Array Mesh to mesh
 	mesh = a_mesh
 	if set_collision:
 		create_collision()
 	#set to invisible on start
-	set_chunk_visibitility(initailly_visible)
+	set_chunk_visible(initailly_visible)
 
 
 #create collision
@@ -124,12 +124,12 @@ func create_collision():
 	create_trimesh_collision()
 
 
-# # Why does this appear to be dead end?
+# Commented out, not being used?
 # #update chunk to check if near viewer
 # func update_chunk(view_pos: Vector2, max_view_dis):
 # 	var viewer_distance = position_coord.distance_to(view_pos)
-# 	var _my_is_visible = viewer_distance <= max_view_dis
-# 	#set_chunk_visibitility(_is_visible)
+# 	var is_visible = viewer_distance <= max_view_dis
+# 	#set_chunk_visible(is_visible)
 
 
 #SLOW
@@ -173,8 +173,8 @@ func free_chunk():
 
 
 #set chunk visibility
-func set_chunk_visibitility(_is_visible):
-	visible = _is_visible
+func set_chunk_visible(is_visible):
+	visible = is_visible
 
 
 #get chunk visible
