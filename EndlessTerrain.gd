@@ -43,10 +43,10 @@ func update_visible_chunk():
 	var current_x = roundi(viewer_position.x / chunk_size)
 	var current_y = roundi(viewer_position.y / chunk_size)
 	#get all the chunks within visiblity range
-	for yOffset in range(-chunksvisible, chunksvisible):
+	for y_offset in range(-chunksvisible, chunksvisible):
 		for x_offset in range(-chunksvisible, chunksvisible):
 			#create a new chunk coordinate
-			var view_chunk_coord = Vector2(current_x - x_offset, current_y - yOffset)
+			var view_chunk_coord = Vector2(current_x - x_offset, current_y - y_offset)
 			#check if chunk was already created
 			if terrain_chunks.has(view_chunk_coord):
 				var ref = weakref(terrain_chunks[view_chunk_coord])

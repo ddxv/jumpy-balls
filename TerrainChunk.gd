@@ -8,7 +8,7 @@ extends MeshInstance3D
 #set the minimum to maximum lods
 #to change the terrain resolution
 @export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
-@export var LOD_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
+@export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
 #2D position in world space
 var position_coord = Vector2()
 var grid_coord = Vector2()
@@ -122,12 +122,12 @@ func update_lod(view_pos: Vector2):
 	var viewer_distance = position_coord.distance_to(view_pos)
 	var update_terrain = false
 	var new_lod = chunk_lods[0]
-	if chunk_lods.size() != LOD_distances.size():
+	if chunk_lods.size() != lod_distances.size():
 		print("ERROR Lods and Distance count mismatch")
 		return
 	for i in range(chunk_lods.size()):
 		var lod = chunk_lods[i]
-		var dis = LOD_distances[i]
+		var dis = lod_distances[i]
 		if viewer_distance < dis:
 			new_lod = lod
 	#if terrain is at highest detail create collision shape
