@@ -65,7 +65,7 @@ func update_visible_chunk():
 				var chunk: TerrainChunk = chunk_mesh_scene.instantiate()
 				add_child(chunk)
 				#set chunk parameters
-				chunk.Terrain_Max_Height = terrain_height
+				chunk.terrain_max_height = terrain_height
 				#set chunk world position
 				var pos = view_chunk_coord * chunk_size
 				var world_position = Vector3(pos.x, 0, pos.y)

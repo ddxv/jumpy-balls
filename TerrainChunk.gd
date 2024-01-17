@@ -1,10 +1,10 @@
 class_name TerrainChunk
 extends MeshInstance3D
 #Terrain size
-@export_range(20, 400, 1) var Terrain_Size := 200
+@export_range(20, 400, 1) var terrain_size := 200
 #LOD scaling
 @export_range(1, 100, 1) var resolution := 20
-@export var Terrain_Max_Height = 5
+@export var terrain_max_height = 5
 #set the minimum to maximum lods
 #to change the terrain resolution
 @export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
@@ -38,7 +38,7 @@ func gen_water(a_mesh: ArrayMesh, size: int):
 
 
 func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initailly_visible: bool):
-	Terrain_Size = size
+	terrain_size = size
 	#set 2D position in world space
 	grid_coord = coords
 	position_coord = coords * size
@@ -54,12 +54,12 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initai
 			#offset it by -0.5 to make origin centered
 			var point_on_mesh = Vector3(percent.x - CENTER_OFFSET, 0, percent.y - CENTER_OFFSET)
 			#multiplay it by the Terrain size to get vertex position
-			var vertex = point_on_mesh * Terrain_Size
+			var vertex = point_on_mesh * terrain_size
 			#set the height of the vertex by noise
 			#pass position to make noise continueous
 			vertex.y = (
 				noise.get_noise_2d(position.x + vertex.x, position.z + vertex.z)
-				* Terrain_Max_Height
+				* terrain_max_height
 			)
 			#create UVs using percentage
 			var uv = Vector2()
