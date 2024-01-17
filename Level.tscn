@@ -59,5 +59,3 @@ script = ExtResource("5_0kfao")
 viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("6_d4cdj")
 chunk_size = 200
-terrain_height = null
-render_debug = null
