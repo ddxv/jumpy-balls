@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var chunkSize = 100
+@export var chunk_size = 100
 @export var terrain_height = 20
 @export var view_distance = 500
 @export var viewer: Node3D
@@ -16,7 +16,7 @@ var last_visible_chunks = []
 
 func _ready():
 	#set the total chunks to be visible
-	chunksvisible = roundi(view_distance / chunkSize)
+	chunksvisible = roundi(view_distance / chunk_size)
 	viewer = viewer.get_node("MyBall")
 	if render_debug:
 		set_wireframe()
@@ -40,13 +40,13 @@ func updateVisibleChunk():
 #		chunk.setChunkVisible(false)
 #	last_visible_chunks.clear()
 	#get grid position
-	var current_x = roundi(viewer_position.x / chunkSize)
-	var current_y = roundi(viewer_position.y / chunkSize)
+	var currentX = roundi(viewer_position.x / chunk_size)
+	var currentY = roundi(viewer_position.y / chunk_size)
 	#get all the chunks within visiblity range
 	for yOffset in range(-chunksvisible, chunksvisible):
 		for xOffset in range(-chunksvisible, chunksvisible):
 			#create a new chunk coordinate
-			var view_chunk_coord = Vector2(current_x - xOffset, current_y - yOffset)
+			var view_chunk_coord = Vector2(currentX - xOffset, currentY - yOffset)
 			#check if chunk was already created
 			if terrain_chunks.has(view_chunk_coord):
 				var ref = weakref(terrain_chunks[view_chunk_coord])
@@ -54,7 +54,7 @@ func updateVisibleChunk():
 				terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
 				if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
 					terrain_chunks[view_chunk_coord].generate_terrain(
-						noise, view_chunk_coord, chunkSize, true
+						noise, view_chunk_coord, chunk_size, true
 					)
 				#if chunk is visible add it to last visible chunks
 #				if terrain_chunks[view_chunk_coord].getChunkVisible():
@@ -67,10 +67,10 @@ func updateVisibleChunk():
 				#set chunk parameters
 				chunk.Terrain_Max_Height = terrain_height
 				#set chunk world position
-				var pos = view_chunk_coord * chunkSize
+				var pos = view_chunk_coord * chunk_size
 				var world_position = Vector3(pos.x, 0, pos.y)
 				chunk.global_position = world_position
-				chunk.generate_terrain(noise, view_chunk_coord, chunkSize, false)
+				chunk.generate_terrain(noise, view_chunk_coord, chunk_size, false)
 				terrain_chunks[view_chunk_coord] = chunk
 #check if we should remove chunk from scene
 	for chunk in get_children():
