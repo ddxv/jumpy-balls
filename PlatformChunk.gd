@@ -1,4 +1,4 @@
-class_name TerrainChunk
+class_name PlatformChunk
 extends MeshInstance3D
 
 const CENTER_OFFSET = 0.5
@@ -39,7 +39,7 @@ func gen_water(a_mesh: ArrayMesh, size: int):
 	mesh = a_mesh
 
 
-func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initailly_visible: bool):
+func generate_terrain(my_height: int, coords: Vector2, size: float, initailly_visible: bool):
 	terrain_size = size
 	#set 2D position in world space
 	grid_coord = coords
@@ -57,12 +57,7 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initai
 			var point_on_mesh = Vector3(percent.x - CENTER_OFFSET, 0, percent.y - CENTER_OFFSET)
 			#multiplay it by the Terrain size to get vertex position
 			var vertex = point_on_mesh * terrain_size
-			#set the height of the vertex by noise
-			#pass position to make noise continueous
-			vertex.y = (
-				noise.get_noise_2d(position.x + vertex.x, position.z + vertex.z)
-				* terrain_max_height
-			)
+			vertex.y = my_height 
 			#create UVs using percentage
 			var uv = Vector2()
 			uv.x = percent.x
