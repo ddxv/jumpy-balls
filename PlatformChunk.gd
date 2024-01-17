@@ -1,4 +1,4 @@
-class_name TerrainChunk
+class_name PlatformChunk
 extends MeshInstance3D
 
 const CENTER_OFFSET = 0.5
@@ -20,17 +20,41 @@ var grid_coord = Vector2()
 var set_collision = false
 
 
-func gen_water(a_mesh: ArrayMesh, size: int):
-	#var a_mesh = ArrayMesh.new()
+func gen_platform(a_mesh: ArrayMesh, size: int, my_height: int):
+	var platform_size = size / 4
+	var platform_thickness = 20
+	var ramp_height = 40
 	var vertices := PackedVector3Array(
 		[
-			Vector3(-size, -50, -size),
-			Vector3(size, -50, -size),
-			Vector3(size, -50, size),
-			Vector3(-size, -50, size),
+			# TOP NORTH SIDE
+			Vector3(-platform_size, my_height + ramp_height, -platform_size),
+			Vector3(platform_size, my_height + ramp_height, -platform_size),
+			Vector3(platform_size, my_height, platform_size),
+			Vector3(-platform_size, my_height, platform_size),
+			# SOUTH LEFT SIDE
+			Vector3(platform_size, my_height - platform_thickness, platform_size + ramp_height),
+			# SOUTH RIGHT SIDE
+			Vector3(-platform_size, my_height - platform_thickness, platform_size + ramp_height),
 		]
 	)
-	var indices := PackedInt32Array([0, 1, 2, 0, 2, 3])
+	var indices := PackedInt32Array(
+		[
+			# TOP
+			0,
+			1,
+			2,
+			0,
+			2,
+			3,
+			# SOUTH SIDE
+			2,
+			5,
+			3,
+			2,
+			4,
+			5
+		]
+	)
 	var array = []
 	array.resize(Mesh.ARRAY_MAX)
 	array[Mesh.ARRAY_VERTEX] = vertices
@@ -39,7 +63,7 @@ func gen_water(a_mesh: ArrayMesh, size: int):
 	mesh = a_mesh
 
 
-func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initailly_visible: bool):
+func generate_terrain(my_height: int, coords: Vector2, size: float, initailly_visible: bool):
 	terrain_size = size
 	#set 2D position in world space
 	grid_coord = coords
@@ -47,47 +71,20 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initai
 	var a_mesh: ArrayMesh
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	#use resolution to loop
-	for z in resolution + 1:
-		for x in resolution + 1:
-			#get the percentage of the current point
-			var percent = Vector2(x, z) / resolution
-			#create the point on the mesh
-			#offset it by -0.5 to make origin centered
-			var point_on_mesh = Vector3(percent.x - CENTER_OFFSET, 0, percent.y - CENTER_OFFSET)
-			#multiplay it by the Terrain size to get vertex position
-			var vertex = point_on_mesh * terrain_size
-			#set the height of the vertex by noise
-			#pass position to make noise continueous
-			vertex.y = (
-				noise.get_noise_2d(position.x + vertex.x, position.z + vertex.z)
-				* terrain_max_height
-			)
-			#create UVs using percentage
-			var uv = Vector2()
-			uv.x = percent.x
-			uv.y = percent.y
-			#set UV and add Vertex
-			surftool.set_uv(uv)
-			surftool.add_vertex(vertex)
-	#created indices for triangle
-	#clockwise
-	var vert = 0
-	for z in resolution:
-		for x in resolution:
-			surftool.add_index(vert + 0)
-			surftool.add_index(vert + 1)
-			surftool.add_index(vert + resolution + 1)
-			surftool.add_index(vert + resolution + 1)
-			surftool.add_index(vert + 1)
-			surftool.add_index(vert + resolution + 2)
-			vert += 1
-		vert += 1
 	#Generate Normal Map
 	surftool.generate_normals()
 	#create Array Mesh from Data
 	a_mesh = surftool.commit()
-	gen_water(a_mesh, size)
+	if randi() % 100 < 80:
+		gen_platform(a_mesh, size, my_height)
+	if randi() % 100 < 80:
+		gen_platform(a_mesh, size / 2, my_height + 100)
+	if randi() % 100 < 50:
+		gen_platform(a_mesh, size / 4, my_height + 200)
+	if randi() % 100 < 30:
+		gen_platform(a_mesh, size / 4, my_height + 400)
+	if randi() % 100 < 20:
+		gen_platform(a_mesh, size / 4, my_height + 800)
 	#assign Array Mesh to mesh
 	mesh = a_mesh
 	if set_collision:

@@ -6,7 +6,6 @@ extends Node3D
 
 @export var chunk_size = 100
 @export var terrain_height = 20
-@export var view_distance = 500
 @export var render_debug := false
 
 var terrain_chunks = {}
@@ -18,7 +17,7 @@ var last_visible_chunks = []
 
 func _ready():
 	#set the total chunks to be visible
-	chunksvisible = roundi(view_distance / chunk_size)
+	chunksvisible = roundi(Globals.VIEW_DISTANCE / chunk_size)
 	viewer = viewer.get_node("MyBall")
 	if render_debug:
 		set_wireframe()
@@ -76,7 +75,7 @@ func update_visible_chunk():
 				terrain_chunks[view_chunk_coord] = chunk
 #check if we should remove chunk from scene
 	for chunk in get_children():
-		if chunk.should_remove(viewer_position, view_distance):
+		if chunk.should_remove(viewer_position):
 			chunk.queue_free()
 			if terrain_chunks.has(chunk.grid_coord):
 				terrain_chunks.erase(chunk.grid_coord)
