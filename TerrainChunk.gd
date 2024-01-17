@@ -52,9 +52,9 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initai
 			var percent = Vector2(x, z) / resolution
 			#create the point on the mesh
 			#offset it by -0.5 to make origin centered
-			var pointOnMesh = Vector3(percent.x - CENTER_OFFSET, 0, percent.y - CENTER_OFFSET)
+			var point_on_mesh = Vector3(percent.x - CENTER_OFFSET, 0, percent.y - CENTER_OFFSET)
 			#multiplay it by the Terrain size to get vertex position
-			var vertex = pointOnMesh * Terrain_Size
+			var vertex = point_on_mesh * Terrain_Size
 			#set the height of the vertex by noise
 			#pass position to make noise continueous
 			vertex.y = (
@@ -91,7 +91,7 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initai
 	if set_collision:
 		create_collision()
 	#set to invisible on start
-	setChunkVisible(initailly_visible)
+	set_chunk_visible(initailly_visible)
 
 
 #create collision
@@ -105,7 +105,7 @@ func create_collision():
 func update_chunk(view_pos: Vector2, max_view_dis):
 	var viewer_distance = position_coord.distance_to(view_pos)
 	var _is_visible = viewer_distance <= max_view_dis
-	#setChunkVisible(_is_visible)
+	#set_chunk_visible(_is_visible)
 
 
 #SLOW
@@ -149,10 +149,10 @@ func free_chunk():
 
 
 #set chunk visibility
-func setChunkVisible(_is_visible):
+func set_chunk_visible(_is_visible):
 	visible = _is_visible
 
 
 #get chunk visible
-func getChunkVisible():
+func get_chunk_visible():
 	return visible

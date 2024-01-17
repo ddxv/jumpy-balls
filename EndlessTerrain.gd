@@ -20,7 +20,7 @@ func _ready():
 	viewer = viewer.get_node("MyBall")
 	if render_debug:
 		set_wireframe()
-	updateVisibleChunk()
+	update_visible_chunk()
 
 
 func set_wireframe():
@@ -31,22 +31,22 @@ func set_wireframe():
 func _process(delta):
 	viewer_position.x = viewer.global_position.x
 	viewer_position.y = viewer.global_position.z
-	updateVisibleChunk()
+	update_visible_chunk()
 
 
-func updateVisibleChunk():
+func update_visible_chunk():
 	#hide chunks that were are out of view
 #	for chunk in last_visible_chunks:
 #		chunk.setChunkVisible(false)
 #	last_visible_chunks.clear()
 	#get grid position
-	var currentX = roundi(viewer_position.x / chunk_size)
-	var currentY = roundi(viewer_position.y / chunk_size)
+	var current_x = roundi(viewer_position.x / chunk_size)
+	var current_y = roundi(viewer_position.y / chunk_size)
 	#get all the chunks within visiblity range
 	for yOffset in range(-chunksvisible, chunksvisible):
-		for xOffset in range(-chunksvisible, chunksvisible):
+		for x_offset in range(-chunksvisible, chunksvisible):
 			#create a new chunk coordinate
-			var view_chunk_coord = Vector2(currentX - xOffset, currentY - yOffset)
+			var view_chunk_coord = Vector2(current_x - x_offset, current_y - yOffset)
 			#check if chunk was already created
 			if terrain_chunks.has(view_chunk_coord):
 				var ref = weakref(terrain_chunks[view_chunk_coord])
