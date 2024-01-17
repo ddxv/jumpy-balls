@@ -1,63 +1,68 @@
 class_name TerrainChunk
 extends MeshInstance3D
+
+const CENTER_OFFSET = 0.5
+
 #Terrain size
-@export_range(20,400, 1)var Terrain_Size := 200
+@export_range(20, 400, 1) var terrain_size := 200
 #LOD scaling
 @export_range(1, 100, 1) var resolution := 20
-@export var Terrain_Max_Height = 5
-#set the minimum to maximum lods 
+@export var terrain_max_height = 5
+#set the minimum to maximum lods
 #to change the terrain resolution
-@export var chunk_lods : Array[int] = [2,4,8,15,20,50]
-@export var LOD_distances : Array[int] = [2000,1500,1050,900,790,550]
+@export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
+@export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
+
 #2D position in world space
 var position_coord = Vector2()
 var grid_coord = Vector2()
 
-const CENTER_OFFSET = 0.5
-
 var set_collision = false
 
-func gen_water(a_mesh:ArrayMesh, size:int):
+
+func gen_water(a_mesh: ArrayMesh, size: int):
 	#var a_mesh = ArrayMesh.new()
-	var vertices := PackedVector3Array([
-		Vector3(-size,-50,-size),
-		Vector3(size,-50,-size),
-		Vector3(size,-50,size),
-		Vector3(-size,-50,size),
-	])
-	var indices := PackedInt32Array([
-		0,1,2,
-		0,2,3
-	])
+	var vertices := PackedVector3Array(
+		[
+			Vector3(-size, -50, -size),
+			Vector3(size, -50, -size),
+			Vector3(size, -50, size),
+			Vector3(-size, -50, size),
+		]
+	)
+	var indices := PackedInt32Array([0, 1, 2, 0, 2, 3])
 	var array = []
 	array.resize(Mesh.ARRAY_MAX)
 	array[Mesh.ARRAY_VERTEX] = vertices
 	array[Mesh.ARRAY_INDEX] = indices
-	a_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,array)
+	a_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, array)
 	mesh = a_mesh
-	
 
-func generate_terrain(noise:FastNoiseLite,coords:Vector2,size:float,initailly_visible:bool):
-	Terrain_Size = size
+
+func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initailly_visible: bool):
+	terrain_size = size
 	#set 2D position in world space
 	grid_coord = coords
 	position_coord = coords * size
-	var a_mesh :ArrayMesh
+	var a_mesh: ArrayMesh
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	#use resolution to loop
-	for z in resolution+1:
-		for x in resolution+1:
+	for z in resolution + 1:
+		for x in resolution + 1:
 			#get the percentage of the current point
-			var percent = Vector2(x,z)/resolution
+			var percent = Vector2(x, z) / resolution
 			#create the point on the mesh
 			#offset it by -0.5 to make origin centered
-			var pointOnMesh = Vector3((percent.x-CENTER_OFFSET),0,(percent.y-CENTER_OFFSET))
+			var point_on_mesh = Vector3(percent.x - CENTER_OFFSET, 0, percent.y - CENTER_OFFSET)
 			#multiplay it by the Terrain size to get vertex position
-			var vertex = pointOnMesh * Terrain_Size;
+			var vertex = point_on_mesh * terrain_size
 			#set the height of the vertex by noise
 			#pass position to make noise continueous
-			vertex.y = noise.get_noise_2d(position.x+vertex.x,position.z+vertex.z) * Terrain_Max_Height
+			vertex.y = (
+				noise.get_noise_2d(position.x + vertex.x, position.z + vertex.z)
+				* terrain_max_height
+			)
 			#create UVs using percentage
 			var uv = Vector2()
 			uv.x = percent.x
@@ -70,14 +75,14 @@ func generate_terrain(noise:FastNoiseLite,coords:Vector2,size:float,initailly_vi
 	var vert = 0
 	for z in resolution:
 		for x in resolution:
-			surftool.add_index(vert+0)
-			surftool.add_index(vert+1)
-			surftool.add_index(vert+resolution+1)
-			surftool.add_index(vert+resolution+1)
-			surftool.add_index(vert+1)
-			surftool.add_index(vert+resolution+2)
-			vert+=1
-		vert+=1
+			surftool.add_index(vert + 0)
+			surftool.add_index(vert + 1)
+			surftool.add_index(vert + resolution + 1)
+			surftool.add_index(vert + resolution + 1)
+			surftool.add_index(vert + 1)
+			surftool.add_index(vert + resolution + 2)
+			vert += 1
+		vert += 1
 	#Generate Normal Map
 	surftool.generate_normals()
 	#create Array Mesh from Data
@@ -88,7 +93,7 @@ func generate_terrain(noise:FastNoiseLite,coords:Vector2,size:float,initailly_vi
 	if set_collision:
 		create_collision()
 	#set to invisible on start
-	setChunkVisible(initailly_visible)
+	set_chunk_visible(initailly_visible)
 
 
 #create collision
@@ -96,36 +101,39 @@ func create_collision():
 	if get_child_count() > 0:
 		get_child(0).queue_free()
 	create_trimesh_collision()
-	
-#update chunk to check if near viewer
-func update_chunk(view_pos:Vector2,max_view_dis):
-	var viewer_distance = position_coord.distance_to(view_pos)
-	var _is_visible = viewer_distance <= max_view_dis
-	#setChunkVisible(_is_visible)
+
+
+# #update chunk to check if near viewer
+# func update_chunk(view_pos: Vector2, max_view_dis):
+# 	var viewer_distance = position_coord.distance_to(view_pos)
+# 	var _is_visible = viewer_distance <= max_view_dis
+# 	#set_chunk_visible(_is_visible)
+
 
 #SLOW
-func should_remove(view_pos:Vector2,max_view_dis):
+func should_remove(view_pos: Vector2, max_view_dis):
 	var remove = false
 	var viewer_distance = position_coord.distance_to(view_pos)
 	if viewer_distance > max_view_dis:
 		remove = true
 	return remove
-	
+
+
 #update mesh based on distance
-func update_lod(view_pos:Vector2):
+func update_lod(view_pos: Vector2):
 	var viewer_distance = position_coord.distance_to(view_pos)
 	var update_terrain = false
 	var new_lod = chunk_lods[0]
-	if chunk_lods.size() != LOD_distances.size():
+	if chunk_lods.size() != lod_distances.size():
 		print("ERROR Lods and Distance count mismatch")
 		return
 	for i in range(chunk_lods.size()):
 		var lod = chunk_lods[i]
-		var dis = LOD_distances[i]
+		var dis = lod_distances[i]
 		if viewer_distance < dis:
 			new_lod = lod
 	#if terrain is at highest detail create collision shape
-	if new_lod >= chunk_lods[chunk_lods.size()-1]:
+	if new_lod >= chunk_lods[chunk_lods.size() - 1]:
 		set_collision = true
 	else:
 		set_collision = false
@@ -136,13 +144,17 @@ func update_lod(view_pos:Vector2):
 		update_terrain = true
 	return update_terrain
 
+
 #remove chunk
 func free_chunk():
 	queue_free()
+
+
 #set chunk visibility
-func setChunkVisible(_is_visible):
+func set_chunk_visible(_is_visible):
 	visible = _is_visible
 
+
 #get chunk visible
-func getChunkVisible():
+func get_chunk_visible():
 	return visible
