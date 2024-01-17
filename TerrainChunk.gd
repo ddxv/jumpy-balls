@@ -1,5 +1,8 @@
 class_name TerrainChunk
 extends MeshInstance3D
+
+const CENTER_OFFSET = 0.5
+
 #Terrain size
 @export_range(20, 400, 1) var terrain_size := 200
 #LOD scaling
@@ -9,11 +12,10 @@ extends MeshInstance3D
 #to change the terrain resolution
 @export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
 @export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
+
 #2D position in world space
 var position_coord = Vector2()
 var grid_coord = Vector2()
-
-const CENTER_OFFSET = 0.5
 
 var set_collision = false
 
@@ -101,11 +103,11 @@ func create_collision():
 	create_trimesh_collision()
 
 
-#update chunk to check if near viewer
-func update_chunk(view_pos: Vector2, max_view_dis):
-	var viewer_distance = position_coord.distance_to(view_pos)
-	var _is_visible = viewer_distance <= max_view_dis
-	#set_chunk_visible(_is_visible)
+# #update chunk to check if near viewer
+# func update_chunk(view_pos: Vector2, max_view_dis):
+# 	var viewer_distance = position_coord.distance_to(view_pos)
+# 	var _is_visible = viewer_distance <= max_view_dis
+# 	#set_chunk_visible(_is_visible)
 
 
 #SLOW

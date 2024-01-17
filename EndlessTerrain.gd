@@ -1,17 +1,19 @@
 extends Node3D
 
+@export var viewer: Node3D
+@export var chunk_mesh_scene: PackedScene
+@export var noise: FastNoiseLite
+
 @export var chunk_size = 100
 @export var terrain_height = 20
 @export var view_distance = 500
-@export var viewer: Node3D
-@export var chunk_mesh_scene: PackedScene
 @export var render_debug := false
-var viewer_position = Vector2()
+
 var terrain_chunks = {}
 var chunksvisible = 0
 
+var viewer_position = Vector2()
 var last_visible_chunks = []
-@export var noise: FastNoiseLite
 
 
 func _ready():
@@ -28,7 +30,7 @@ func set_wireframe():
 	get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
 
 
-func _process(delta):
+func _process(_delta):
 	viewer_position.x = viewer.global_position.x
 	viewer_position.y = viewer.global_position.z
 	update_visible_chunk()
@@ -51,7 +53,7 @@ func update_visible_chunk():
 			if terrain_chunks.has(view_chunk_coord):
 				var ref = weakref(terrain_chunks[view_chunk_coord])
 				#if chunk exist update the chunk passing viewer_position and view_distance
-				terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
+				# terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
 				if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
 					terrain_chunks[view_chunk_coord].generate_terrain(
 						noise, view_chunk_coord, chunk_size, true
