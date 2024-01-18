@@ -20,7 +20,7 @@ var grid_coord = Vector2()
 var set_collision = false
 
 
-func gen_platform(a_mesh: ArrayMesh, size: int, my_height: int):
+func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 	var platform_size = size / 4
 	var platform_thickness = 20
 	var ramp_height = 40
@@ -36,6 +36,10 @@ func gen_platform(a_mesh: ArrayMesh, size: int, my_height: int):
 			# SOUTH RIGHT SIDE
 			Vector3(-platform_size, my_height - platform_thickness, platform_size + ramp_height),
 		]
+	)
+
+	var uvs := PackedVector2Array(
+		[Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 0), Vector2(1, 1), Vector2(0, 1)]
 	)
 	var indices := PackedInt32Array(
 		[
@@ -55,12 +59,27 @@ func gen_platform(a_mesh: ArrayMesh, size: int, my_height: int):
 			5
 		]
 	)
+
 	var array = []
 	array.resize(Mesh.ARRAY_MAX)
 	array[Mesh.ARRAY_VERTEX] = vertices
 	array[Mesh.ARRAY_INDEX] = indices
-	a_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, array)
-	mesh = a_mesh
+	array[Mesh.ARRAY_TEX_UV] = uvs  # Add the UV array here
+
+	# Add each vertex and UV coordinate
+	for i in range(vertices.size()):
+		surftool.add_vertex(vertices[i])
+		surftool.set_uv(uvs[i])
+
+	# Add indices
+	for i in range(indices.size()):
+		surftool.add_index(indices[i])
+
+	# # Add uv
+	# for i in range(uvs.size()):
+	# 	surftool.set_uv(uvs[i])
+
+	return surftool
 
 
 func generate_terrain(my_height: int, coords: Vector2, size: float, initailly_visible: bool):
@@ -71,21 +90,20 @@ func generate_terrain(my_height: int, coords: Vector2, size: float, initailly_vi
 	var a_mesh: ArrayMesh
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	#create Array Mesh from Data
+	if randi() % 100 < 20:
+		surftool = gen_platform(surftool, size, my_height)
+	if randi() % 100 < 10:
+		surftool = gen_platform(surftool, size / 2, my_height + 200)
+	if randi() % 100 < 10:
+		surftool = gen_platform(surftool, size / 4, my_height + 400)
+	if randi() % 100 < 5:
+		surftool = gen_platform(surftool, size / 4, my_height + 600)
+	if randi() % 100 < 1:
+		surftool = gen_platform(surftool, size / 4, my_height + 1000)
 	#Generate Normal Map
 	surftool.generate_normals()
-	#create Array Mesh from Data
 	a_mesh = surftool.commit()
-	if randi() % 100 < 80:
-		gen_platform(a_mesh, size, my_height)
-	if randi() % 100 < 80:
-		gen_platform(a_mesh, size / 2, my_height + 100)
-	if randi() % 100 < 50:
-		gen_platform(a_mesh, size / 4, my_height + 200)
-	if randi() % 100 < 30:
-		gen_platform(a_mesh, size / 4, my_height + 400)
-	if randi() % 100 < 20:
-		gen_platform(a_mesh, size / 4, my_height + 800)
-	#assign Array Mesh to mesh
 	mesh = a_mesh
 	if set_collision:
 		create_collision()
