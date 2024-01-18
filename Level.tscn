@@ -57,5 +57,8 @@ terrain_height = 200
 [node name="InfinitePlatforms" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
 script = ExtResource("5_0kfao")
 chunk_size = 400
+terrain_height = null
+view_distance = 2000
 viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("6_d4cdj")
+render_debug = null

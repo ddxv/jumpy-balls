@@ -74,6 +74,7 @@ func update_visible_chunk():
 #check if we should remove chunk from scene
 	for chunk in get_children():
 		if chunk.should_remove(viewer_position):
+			print("will remove chunk view:", viewer_position, " chunk: ", chunk.grid_coord)
 			chunk.queue_free()
 			if terrain_chunks.has(chunk.grid_coord):
 				terrain_chunks.erase(chunk.grid_coord)

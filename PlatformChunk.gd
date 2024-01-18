@@ -10,8 +10,9 @@ const CENTER_OFFSET = 0.5
 @export var terrain_max_height = 5
 #set the minimum to maximum lods
 #to change the terrain resolution
-@export var chunk_lods: Array[int] = [15, 20, 50]
-@export var lod_distances: Array[int] = [500, 250, 100]
+
+@export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
+@export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
 
 #2D position in world space
 var position_coord = Vector2()
@@ -22,13 +23,13 @@ var set_collision = false
 
 func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 	var platform_size = size / 4
-	var platform_thickness = 20
-	var ramp_height = 40
+	var platform_thickness = 100
+	var ramp_height = 200
 	var vertices := PackedVector3Array(
 		[
 			# TOP NORTH SIDE
-			Vector3(-platform_size, my_height + ramp_height, -platform_size),
-			Vector3(platform_size, my_height + ramp_height, -platform_size),
+			Vector3(-platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
+			Vector3(platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
 			Vector3(platform_size, my_height, platform_size),
 			Vector3(-platform_size, my_height, platform_size),
 			# SOUTH LEFT SIDE
@@ -91,15 +92,15 @@ func generate_terrain(my_height: int, coords: Vector2, size: float, initailly_vi
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	#create Array Mesh from Data
-	if randi() % 100 < 20:
+	if int(grid_coord.x + grid_coord.y) % 2 == 0:
 		surftool = gen_platform(surftool, size, my_height)
-	if randi() % 100 < 10:
+	if int(grid_coord.x + grid_coord.y) % 3 == 0:
 		surftool = gen_platform(surftool, size / 2, my_height + 200)
-	if randi() % 100 < 10:
+	if int(grid_coord.x + grid_coord.y) % 4 == 0:
 		surftool = gen_platform(surftool, size / 4, my_height + 400)
-	if randi() % 100 < 5:
+	if int(grid_coord.x + grid_coord.y) % 5 == 0:
 		surftool = gen_platform(surftool, size / 4, my_height + 600)
-	if randi() % 100 < 1:
+	if int(grid_coord.x + grid_coord.y) % 6 == 0:
 		surftool = gen_platform(surftool, size / 4, my_height + 1000)
 	#Generate Normal Map
 	surftool.generate_normals()
