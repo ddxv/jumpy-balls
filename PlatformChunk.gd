@@ -10,8 +10,8 @@ const CENTER_OFFSET = 0.5
 @export var terrain_max_height = 5
 #set the minimum to maximum lods
 #to change the terrain resolution
-@export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
-@export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
+@export var chunk_lods: Array[int] = [15, 20, 50]
+@export var lod_distances: Array[int] = [500, 250, 100]
 
 #2D position in world space
 var position_coord = Vector2()
@@ -129,7 +129,7 @@ func create_collision():
 func should_remove(view_pos: Vector2):
 	var remove = false
 	var viewer_distance = position_coord.distance_to(view_pos)
-	if viewer_distance > Globals.VIEW_DISTANCE:
+	if viewer_distance > Globals.VIEW_DISTANCE * 1.1:
 		remove = true
 	return remove
 
