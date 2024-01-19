@@ -53,7 +53,7 @@ func _physics_process(delta):
 
 	var moving_dir: Vector3 = last_position.direction_to(ball_position)
 
-	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 2, 2), 1)
+	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 2, 3), 1)
 	# As the ball moves, move the raycast along with it
 	floor_check.global_transform.origin = global_transform.origin
 	if Input.is_action_pressed("move_forward"):
@@ -71,7 +71,7 @@ func _physics_process(delta):
 	angular_velocity.x = clamp(angular_velocity.x, -MAX_SPIN, MAX_SPIN)
 	angular_velocity.y = clamp(angular_velocity.y, -MAX_SPIN, MAX_SPIN)
 	angular_velocity.z = clamp(angular_velocity.z, -MAX_SPIN, MAX_SPIN)
-	print("my angular", angular_velocity)
+	# print("my angular", angular_velocity)
 	# When the ball is on the floor and the user presses jump button,
 	# add impulse moving the ball up.
 	if Input.is_action_just_pressed("jump"):
