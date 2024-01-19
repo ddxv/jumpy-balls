@@ -55,12 +55,9 @@ func update_visible_chunk():
 					terrain_chunks[view_chunk_coord].generate_platforms(
 						0, view_chunk_coord, chunk_size, true
 					)
-				#if chunk is visible add it to last visible chunks
-#				if terrain_chunks[view_chunk_coord].getChunkVisible():
-#					last_visible_chunks.append(terrain_chunks[view_chunk_coord])
 			else:
-				#print(view_chunk_coord)
 				#if chunk doesnt exist, create chunk
+				#print(view_chunk_coord)
 				var chunk: ChunkPlatform = chunk_mesh_scene.instantiate()
 				add_child(chunk)
 				#set chunk parameters
