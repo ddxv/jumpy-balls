@@ -8,8 +8,6 @@ const CENTER_OFFSET = 0.5
 #LOD scaling
 @export_range(1, 100, 1) var resolution := 20
 @export var terrain_max_height = 5
-#set the minimum to maximum lods
-#to change the terrain resolution
 
 @export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
 @export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
@@ -61,24 +59,14 @@ func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 		]
 	)
 
-	var array = []
-	array.resize(Mesh.ARRAY_MAX)
-	array[Mesh.ARRAY_VERTEX] = vertices
-	array[Mesh.ARRAY_INDEX] = indices
-	array[Mesh.ARRAY_TEX_UV] = uvs  # Add the UV array here
-
 	# Add each vertex and UV coordinate
 	for i in range(vertices.size()):
-		surftool.add_vertex(vertices[i])
 		surftool.set_uv(uvs[i])
+		surftool.add_vertex(vertices[i])
 
 	# Add indices
 	for i in range(indices.size()):
 		surftool.add_index(indices[i])
-
-	# # Add uv
-	# for i in range(uvs.size()):
-	# 	surftool.set_uv(uvs[i])
 
 	return surftool
 
@@ -92,15 +80,15 @@ func generate_platforms(my_height: int, coords: Vector2, size: float, initailly_
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	#create Array Mesh from Data
-	if int(grid_coord.x + grid_coord.y) % 2 == 0:
-		surftool = gen_platform(surftool, size, my_height)
-	if int(grid_coord.x + grid_coord.y) % 3 == 0:
-		surftool = gen_platform(surftool, size / 2, my_height + 200)
-	if int(grid_coord.x + grid_coord.y) % 4 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 400)
 	if int(grid_coord.x + grid_coord.y) % 5 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 600)
+		surftool = gen_platform(surftool, size, my_height)
 	if int(grid_coord.x + grid_coord.y) % 6 == 0:
+		surftool = gen_platform(surftool, size / 2, my_height + 200)
+	if int(grid_coord.x + grid_coord.y) % 8 == 0:
+		surftool = gen_platform(surftool, size / 4, my_height + 400)
+	if int(grid_coord.x + grid_coord.y) % 8 == 0:
+		surftool = gen_platform(surftool, size / 4, my_height + 600)
+	if int(grid_coord.x + grid_coord.y) % 8 == 0:
 		surftool = gen_platform(surftool, size / 4, my_height + 1000)
 	#Generate Normal Map
 	surftool.generate_normals()
@@ -117,13 +105,6 @@ func create_collision():
 	if get_child_count() > 0:
 		get_child(0).queue_free()
 	create_trimesh_collision()
-
-
-# #update chunk to check if near viewer
-# func update_chunk(view_pos: Vector2, max_view_dis):
-# 	var viewer_distance = position_coord.distance_to(view_pos)
-# 	var _is_visible = viewer_distance <= max_view_dis
-# 	#set_chunk_visible(_is_visible)
 
 
 #SLOW
