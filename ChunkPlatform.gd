@@ -21,7 +21,7 @@ var set_collision = false
 
 func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 	var platform_size = size / 4
-	var south_length = 400
+	var south_length = 800
 	var ramp_height = 200
 	var vertices := PackedVector3Array(
 		[
@@ -30,13 +30,13 @@ func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 			# TOP NORTH SIDE, 1,1
 			#Vector3(platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
 			# SOUTH TOP SIDE 1,1
-			Vector3(platform_size, my_height, platform_size),
+			Vector3(platform_size, my_height + ramp_height, platform_size),
 			# SOUTH TOP SIDE 0,1
-			Vector3(-platform_size, my_height, platform_size),
+			Vector3(-platform_size, my_height + ramp_height, platform_size),
 			# SOUTH+LOWER SIDE 0,0
-			Vector3(-platform_size, my_height - ramp_height, platform_size + south_length),
+			Vector3(-platform_size, my_height, platform_size + south_length),
 			# SOUTH+LOWER LEFT SIDE 1,0
-			Vector3(platform_size, my_height - ramp_height, platform_size + south_length),
+			Vector3(platform_size, my_height, platform_size + south_length),
 		]
 	)
 
@@ -82,16 +82,16 @@ func generate_platforms(my_height: int, coords: Vector2, size: float, initailly_
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	#create Array Mesh from Data
-	if int(grid_coord.x + grid_coord.y) % 2 == 0:
-		surftool = gen_platform(surftool, size, my_height + 50)
+	if int(grid_coord.x + grid_coord.y) % 4 == 0:
+		surftool = gen_platform(surftool, size, my_height + 100)
 	if int(grid_coord.x + grid_coord.y) % 6 == 0:
 		surftool = gen_platform(surftool, size / 2, my_height + 200)
+	if int(grid_coord.x + grid_coord.y) % 8 == 0:
+		surftool = gen_platform(surftool, size / 4, my_height + 300)
 	if int(grid_coord.x + grid_coord.y) % 8 == 0:
 		surftool = gen_platform(surftool, size / 4, my_height + 400)
 	if int(grid_coord.x + grid_coord.y) % 8 == 0:
 		surftool = gen_platform(surftool, size / 4, my_height + 600)
-	if int(grid_coord.x + grid_coord.y) % 8 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 1000)
 	#Generate Normal Map
 	surftool.generate_normals()
 	a_mesh = surftool.commit()
