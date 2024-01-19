@@ -80,7 +80,7 @@ func generate_platforms(my_height: int, coords: Vector2, size: float, initailly_
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	#create Array Mesh from Data
-	if int(grid_coord.x + grid_coord.y) % 5 == 0:
+	if int(grid_coord.x + grid_coord.y) % 2 == 0:
 		surftool = gen_platform(surftool, size, my_height)
 	if int(grid_coord.x + grid_coord.y) % 6 == 0:
 		surftool = gen_platform(surftool, size / 2, my_height + 200)
