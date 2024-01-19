@@ -1,4 +1,4 @@
-class_name PlatformChunk
+class_name ChunkPlatform
 extends MeshInstance3D
 
 const CENTER_OFFSET = 0.5
@@ -83,7 +83,7 @@ func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 	return surftool
 
 
-func generate_terrain(my_height: int, coords: Vector2, size: float, initailly_visible: bool):
+func generate_platforms(my_height: int, coords: Vector2, size: float, initailly_visible: bool):
 	terrain_size = size
 	#set 2D position in world space
 	grid_coord = coords

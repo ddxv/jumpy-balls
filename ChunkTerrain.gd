@@ -1,4 +1,4 @@
-class_name TerrainChunk
+class_name ChunkTerrain
 extends MeshInstance3D
 
 const CENTER_OFFSET = 0.5

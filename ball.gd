@@ -1,10 +1,11 @@
 extends RigidBody3D
 
 const ACCELERATION = 1.01
-const MAX_FORCE = -200
+const MAX_FORCE = 200
 const MIN_SPEED = -100
-const FORCE_SIDE = MIN_SPEED
-const JUMP_FORCE = -MAX_FORCE * 2
+const FORCE_SIDE = MIN_SPEED * 2
+const JUMP_FORCE = MAX_FORCE
+const MAX_SPIN = 500
 
 var last_contact_count = 0
 var motion = Vector3()
@@ -44,38 +45,47 @@ func _process(_delta):
 
 
 func _physics_process(delta):
+	var glide_direction = Vector3(0, 0, 0)
 	var camera_position: Vector3 = camera_rig.global_transform.origin
 	ball_position = global_transform.origin
 
-	var dir: Vector3 = camera_position.direction_to(ball_position)
+	var cam_to_ball_dir: Vector3 = camera_position.direction_to(ball_position)
 
 	var moving_dir: Vector3 = last_position.direction_to(ball_position)
 
 	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 2, 2), 1)
 	# As the ball moves, move the raycast along with it
 	floor_check.global_transform.origin = global_transform.origin
-
 	if Input.is_action_pressed("move_forward"):
 		angular_velocity.x -= rolling_force * delta
+		glide_direction.y = 1
 	elif Input.is_action_pressed("move_back"):
 		angular_velocity.x += rolling_force * delta
 	if Input.is_action_pressed("move_left"):
 		angular_velocity.z += rolling_force * delta
+		glide_direction.x = -1
 	elif Input.is_action_pressed("move_right"):
 		angular_velocity.z -= rolling_force * delta
-
+		glide_direction.x = 1
+	# Clamping angular velocity to MAX_SPIN
+	angular_velocity.x = clamp(angular_velocity.x, -MAX_SPIN, MAX_SPIN)
+	angular_velocity.y = clamp(angular_velocity.y, -MAX_SPIN, MAX_SPIN)
+	angular_velocity.z = clamp(angular_velocity.z, -MAX_SPIN, MAX_SPIN)
+	print("my angular", angular_velocity)
 	# When the ball is on the floor and the user presses jump button,
 	# add impulse moving the ball up.
 	if Input.is_action_just_pressed("jump"):
 		if floor_check.is_colliding():
 			print("jump")
 			#apply_impulse(Vector3(), Vector3.UP*1000)
-			apply_central_impulse(moving_dir * 100 + Vector3(0, 1, 0) * 100)
+			apply_central_impulse(moving_dir * MAX_FORCE + Vector3(0, 1, 0) * MAX_FORCE)
 		else:
 			print("air jump")
-			apply_central_impulse(dir * 100)
+			apply_central_impulse(cam_to_ball_dir * JUMP_FORCE)
 	if not floor_check.is_colliding():
-		apply_central_impulse(Vector3(0, -1, 0))
+		glide_direction += Vector3(0, -2, 0)
+		apply_central_impulse(glide_direction)
 
-	if global_transform.origin.y < -49:
+	# TODO: Should be + radius of ball or use floor_check raycast
+	if global_transform.origin.y < Globals.DEATH_HEIGHT + 1:
 		game_over()

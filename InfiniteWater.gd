@@ -2,7 +2,6 @@ extends Node3D
 
 @export var viewer: Node3D
 @export var chunk_mesh_scene: PackedScene
-@export var noise: FastNoiseLite
 
 @export var chunk_size = 100
 @export var terrain_height = 20
@@ -54,8 +53,8 @@ func update_visible_chunk():
 				#if chunk exist update the chunk passing viewer_position and view_distance
 				# terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
 				if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
-					terrain_chunks[view_chunk_coord].generate_terrain(
-						noise, view_chunk_coord, chunk_size, true
+					terrain_chunks[view_chunk_coord].generate_water(
+						view_chunk_coord, chunk_size, true
 					)
 				#if chunk is visible add it to last visible chunks
 #				if terrain_chunks[view_chunk_coord].getChunkVisible():
@@ -63,7 +62,7 @@ func update_visible_chunk():
 			else:
 				#print(view_chunk_coord)
 				#if chunk doesnt exist, create chunk
-				var chunk: ChunkTerrain = chunk_mesh_scene.instantiate()
+				var chunk: ChunkWater = chunk_mesh_scene.instantiate()
 				add_child(chunk)
 				#set chunk parameters
 				chunk.terrain_max_height = terrain_height
@@ -71,7 +70,7 @@ func update_visible_chunk():
 				var pos = view_chunk_coord * chunk_size
 				var world_position = Vector3(pos.x, 0, pos.y)
 				chunk.global_position = world_position
-				chunk.generate_terrain(noise, view_chunk_coord, chunk_size, false)
+				chunk.generate_water(view_chunk_coord, chunk_size, false)
 				terrain_chunks[view_chunk_coord] = chunk
 #check if we should remove chunk from scene
 	for chunk in get_children():

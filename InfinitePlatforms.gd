@@ -52,7 +52,7 @@ func update_visible_chunk():
 				#if chunk exist update the chunk passing viewer_position and view_distance
 				# terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
 				if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
-					terrain_chunks[view_chunk_coord].generate_terrain(
+					terrain_chunks[view_chunk_coord].generate_platforms(
 						0, view_chunk_coord, chunk_size, true
 					)
 				#if chunk is visible add it to last visible chunks
@@ -61,7 +61,7 @@ func update_visible_chunk():
 			else:
 				#print(view_chunk_coord)
 				#if chunk doesnt exist, create chunk
-				var chunk: PlatformChunk = chunk_mesh_scene.instantiate()
+				var chunk: ChunkPlatform = chunk_mesh_scene.instantiate()
 				add_child(chunk)
 				#set chunk parameters
 				chunk.terrain_max_height = terrain_height
@@ -69,7 +69,7 @@ func update_visible_chunk():
 				var pos = view_chunk_coord * chunk_size
 				var world_position = Vector3(pos.x, 0, pos.y)
 				chunk.global_position = world_position
-				chunk.generate_terrain(0, view_chunk_coord, chunk_size, false)
+				chunk.generate_platforms(0, view_chunk_coord, chunk_size, false)
 				terrain_chunks[view_chunk_coord] = chunk
 #check if we should remove chunk from scene
 	for chunk in get_children():

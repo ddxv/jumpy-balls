@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxc4qgpj5kxwv"]
+
+[ext_resource type="Script" path="res://ChunkWater.gd" id="1_aighf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4e5r7"]
+
+[node name="ChunkWater" type="MeshInstance3D"]
+material_override = SubResource("ShaderMaterial_4e5r7")
+script = ExtResource("1_aighf")
+terrain_size = null
+resolution = null
+terrain_max_height = null
+chunk_lods = null
+lod_distances = null

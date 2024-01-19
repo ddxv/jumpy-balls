@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://764b5nxbloj0"]
+[gd_scene load_steps=14 format=3 uid="uid://764b5nxbloj0"]
 
 [ext_resource type="PackedScene" uid="uid://b7rsmaso6f0jv" path="res://Ball.tscn" id="1_mqven"]
 [ext_resource type="Script" path="res://score.gd" id="2_k7pnr"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://InfinitePlatforms.gd" id="5_0kfao"]
 [ext_resource type="PackedScene" uid="uid://xxbd64a50fk1" path="res://ChunkTerrain.tscn" id="5_6v3y8"]
 [ext_resource type="PackedScene" uid="uid://usenn6sfc5o5" path="res://ChunkPlatform.tscn" id="6_d4cdj"]
+[ext_resource type="Script" path="res://InfiniteWater.gd" id="7_q5sxu"]
+[ext_resource type="PackedScene" uid="uid://cxc4qgpj5kxwv" path="res://ChunkWater.tscn" id="8_48306"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wiaf0"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -52,13 +54,20 @@ viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("5_6v3y8")
 noise = SubResource("FastNoiseLite_niqrs")
 chunk_size = 400
-terrain_height = 200
+terrain_height = 100
+render_debug = null
 
 [node name="InfinitePlatforms" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
 script = ExtResource("5_0kfao")
 chunk_size = 400
-terrain_height = null
 view_distance = 2000
 viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("6_d4cdj")
+
+[node name="InfiniteWater" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
+script = ExtResource("7_q5sxu")
+viewer = NodePath("../Ball")
+chunk_mesh_scene = ExtResource("8_48306")
+chunk_size = 400
+terrain_height = null
 render_debug = null
