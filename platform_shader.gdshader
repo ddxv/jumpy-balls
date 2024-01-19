@@ -5,7 +5,7 @@ uniform sampler2D text_high;
 uniform float low_height = -40.0;
 uniform float max_height = 800.0;
 varying float vertex_y;
-uniform vec2 uvscale = vec2(5);
+uniform vec2 uvscale = vec2(1);
 void fragment() {
 	float vert_weight = vertex_y;
 	

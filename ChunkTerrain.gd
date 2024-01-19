@@ -22,25 +22,6 @@ var set_collision = false
 var death_height = Globals.DEATH_HEIGHT
 
 
-func gen_water(a_mesh: ArrayMesh, size: float):
-	#var a_mesh = ArrayMesh.new()
-	var vertices := PackedVector3Array(
-		[
-			Vector3(-size, death_height, -size),
-			Vector3(size, death_height, -size),
-			Vector3(size, death_height, size),
-			Vector3(-size, death_height, size),
-		]
-	)
-	var indices := PackedInt32Array([0, 1, 2, 0, 2, 3])
-	var array = []
-	array.resize(Mesh.ARRAY_MAX)
-	array[Mesh.ARRAY_VERTEX] = vertices
-	array[Mesh.ARRAY_INDEX] = indices
-	a_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, array)
-	mesh = a_mesh
-
-
 func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initailly_visible: bool):
 	terrain_size = size
 	#set 2D position in world space
@@ -89,7 +70,6 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: float, initai
 	surftool.generate_normals()
 	#create Array Mesh from Data
 	a_mesh = surftool.commit()
-	gen_water(a_mesh, size)
 	# gen_platform(a_mesh, size)
 	#assign Array Mesh to mesh
 	mesh = a_mesh
