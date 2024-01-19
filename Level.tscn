@@ -54,7 +54,7 @@ viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("5_6v3y8")
 noise = SubResource("FastNoiseLite_niqrs")
 chunk_size = 400
-terrain_height = 100
+terrain_height = 200
 render_debug = null
 
 [node name="InfinitePlatforms" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
@@ -69,5 +69,5 @@ script = ExtResource("7_q5sxu")
 viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("8_48306")
 chunk_size = 400
-terrain_height = null
+terrain_height = 10
 render_debug = null
