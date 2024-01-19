@@ -2,6 +2,7 @@ class_name ChunkPlatform
 extends MeshInstance3D
 
 const CENTER_OFFSET = 0.5
+const RAMP_HEIGHT = 200
 
 #Terrain size
 @export_range(20, 400, 1) var terrain_size := 200
@@ -19,24 +20,23 @@ var grid_coord = Vector2()
 var set_collision = false
 
 
-func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
-	var platform_size = size / 4
-	var south_length = 800
-	var ramp_height = 200
+func gen_platform(surftool: SurfaceTool, size: int, my_height: int, is_ramp: bool):
+	var platform_width = size / 4
+	var my_ramp_height = 0
+
+	if is_ramp:
+		my_ramp_height = RAMP_HEIGHT
+
 	var vertices := PackedVector3Array(
 		[
-			# TOP NORTH SIDE, 0,1
-			#Vector3(-platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
-			# TOP NORTH SIDE, 1,1
-			#Vector3(platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
-			# SOUTH TOP SIDE 1,1
-			Vector3(platform_size, my_height + ramp_height, platform_size),
-			# SOUTH TOP SIDE 0,1
-			Vector3(-platform_size, my_height + ramp_height, platform_size),
-			# SOUTH+LOWER SIDE 0,0
-			Vector3(-platform_size, my_height, platform_size + south_length),
-			# SOUTH+LOWER LEFT SIDE 1,0
-			Vector3(platform_size, my_height, platform_size + south_length),
+			# further end TOP SIDE 1,1
+			Vector3(platform_width, my_height + my_ramp_height, -size),
+			# TOP SIDE 0,1
+			Vector3(-platform_width, my_height + my_ramp_height, -size),
+			# Closer Right SIDE 0,0
+			Vector3(-platform_width, my_height, 0),
+			# Closer LEFT SIDE 1,0
+			Vector3(platform_width, my_height, 0),
 		]
 	)
 
@@ -62,7 +62,6 @@ func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 	)
 	# Add each vertex and UV coordinate
 	for i in range(vertices.size()):
-		print("i", i, "and uv", uvs[i])
 		surftool.set_uv(uvs[i])
 		surftool.add_vertex(vertices[i])
 
@@ -73,25 +72,35 @@ func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 	return surftool
 
 
-func generate_platforms(my_height: int, coords: Vector2, size: float, initailly_visible: bool):
-	terrain_size = size
+func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly_visible: bool):
 	#set 2D position in world space
 	grid_coord = coords
+	var grid_coord_south = grid_coord + Vector2(0, 1)
+	var grid_coord_south_south = grid_coord + Vector2(0, 2)
+	var grid_coord_south_south_south = grid_coord + Vector2(0, 3)
 	position_coord = coords * size
 	var a_mesh: ArrayMesh
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	#create Array Mesh from Data
+	#create Platfrom paths
+	print("try: mygrid", grid_coord, "south:", grid_coord_south)
 	if int(grid_coord.x + grid_coord.y) % 4 == 0:
-		surftool = gen_platform(surftool, size, my_height + 100)
-	if int(grid_coord.x + grid_coord.y) % 6 == 0:
-		surftool = gen_platform(surftool, size / 2, my_height + 200)
-	if int(grid_coord.x + grid_coord.y) % 8 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 300)
-	if int(grid_coord.x + grid_coord.y) % 8 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 400)
-	if int(grid_coord.x + grid_coord.y) % 8 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 600)
+		surftool = gen_platform(surftool, size, multiplier * RAMP_HEIGHT, true)
+		surftool = gen_platform(surftool, size, RAMP_HEIGHT * 3, true)
+	if int(grid_coord_south.x + grid_coord_south.y) % 4 == 0:
+		surftool = gen_platform(surftool, size, RAMP_HEIGHT, false)
+		surftool = gen_platform(surftool, size, RAMP_HEIGHT * 3, false)
+	if int(grid_coord_south_south.x + grid_coord_south_south.y) % 4 == 0:
+		surftool = gen_platform(surftool, size, RAMP_HEIGHT, true)
+	# if int(grid_coord_south_south_south.x + grid_coord_south_south_south.y) % 4 == 0:
+	# 	surftool = gen_platform(surftool, size, RAMP_HEIGHT, false)
+	# SECOND LEVEL OF PLATFORMS START
+	# if int(grid_coord_south.x + grid_coord_south.y) % 4 == 0:
+	# if int(grid_coord_south_south.x + grid_coord_south_south.y) % 4 == 0:
+	# surftool = gen_platform(surftool, size, RAMP_HEIGHT*2, false)
+	# if int(grid_coord_south_south_south.x + grid_coord_south_south_south.y) % 8 == 0:
+	# surftool = gen_platform(surftool, size, RAMP_HEIGHT*2, false)
+
 	#Generate Normal Map
 	surftool.generate_normals()
 	a_mesh = surftool.commit()
