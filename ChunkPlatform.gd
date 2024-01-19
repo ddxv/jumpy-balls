@@ -8,8 +8,6 @@ const CENTER_OFFSET = 0.5
 #LOD scaling
 @export_range(1, 100, 1) var resolution := 20
 @export var terrain_max_height = 5
-#set the minimum to maximum lods
-#to change the terrain resolution
 
 @export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
 @export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
@@ -23,62 +21,54 @@ var set_collision = false
 
 func gen_platform(surftool: SurfaceTool, size: int, my_height: int):
 	var platform_size = size / 4
-	var platform_thickness = 100
+	var south_length = 800
 	var ramp_height = 200
 	var vertices := PackedVector3Array(
 		[
-			# TOP NORTH SIDE
-			Vector3(-platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
-			Vector3(platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
-			Vector3(platform_size, my_height, platform_size),
-			Vector3(-platform_size, my_height, platform_size),
-			# SOUTH LEFT SIDE
-			Vector3(platform_size, my_height - platform_thickness, platform_size + ramp_height),
-			# SOUTH RIGHT SIDE
-			Vector3(-platform_size, my_height - platform_thickness, platform_size + ramp_height),
+			# TOP NORTH SIDE, 0,1
+			#Vector3(-platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
+			# TOP NORTH SIDE, 1,1
+			#Vector3(platform_size, my_height + ramp_height, -platform_size - ramp_height * 2),
+			# SOUTH TOP SIDE 1,1
+			Vector3(platform_size, my_height + ramp_height, platform_size),
+			# SOUTH TOP SIDE 0,1
+			Vector3(-platform_size, my_height + ramp_height, platform_size),
+			# SOUTH+LOWER SIDE 0,0
+			Vector3(-platform_size, my_height, platform_size + south_length),
+			# SOUTH+LOWER LEFT SIDE 1,0
+			Vector3(platform_size, my_height, platform_size + south_length),
 		]
 	)
 
 	var uvs := PackedVector2Array(
-		[Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 0), Vector2(1, 1), Vector2(0, 1)]
-	)
-	var indices := PackedInt32Array(
 		[
-			# TOP
-			0,
-			1,
-			2,
-			0,
-			2,
-			3,
-			# SOUTH SIDE
-			2,
-			5,
-			3,
-			2,
-			4,
-			5
+			Vector2(1, 1),
+			Vector2(1, 0),
+			Vector2(0, 0),
+			Vector2(0, 1),
 		]
 	)
 
-	var array = []
-	array.resize(Mesh.ARRAY_MAX)
-	array[Mesh.ARRAY_VERTEX] = vertices
-	array[Mesh.ARRAY_INDEX] = indices
-	array[Mesh.ARRAY_TEX_UV] = uvs  # Add the UV array here
-
+	var indices := PackedInt32Array(
+		[
+			# SOUTH SIDE (right triangle, then left)
+			0,
+			2,
+			1,
+			2,
+			0,
+			3
+		]
+	)
 	# Add each vertex and UV coordinate
 	for i in range(vertices.size()):
-		surftool.add_vertex(vertices[i])
+		print("i", i, "and uv", uvs[i])
 		surftool.set_uv(uvs[i])
+		surftool.add_vertex(vertices[i])
 
 	# Add indices
 	for i in range(indices.size()):
 		surftool.add_index(indices[i])
-
-	# # Add uv
-	# for i in range(uvs.size()):
-	# 	surftool.set_uv(uvs[i])
 
 	return surftool
 
@@ -92,16 +82,16 @@ func generate_platforms(my_height: int, coords: Vector2, size: float, initailly_
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	#create Array Mesh from Data
-	if int(grid_coord.x + grid_coord.y) % 2 == 0:
-		surftool = gen_platform(surftool, size, my_height)
-	if int(grid_coord.x + grid_coord.y) % 3 == 0:
-		surftool = gen_platform(surftool, size / 2, my_height + 200)
 	if int(grid_coord.x + grid_coord.y) % 4 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 400)
-	if int(grid_coord.x + grid_coord.y) % 5 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 600)
+		surftool = gen_platform(surftool, size, my_height + 100)
 	if int(grid_coord.x + grid_coord.y) % 6 == 0:
-		surftool = gen_platform(surftool, size / 4, my_height + 1000)
+		surftool = gen_platform(surftool, size / 2, my_height + 200)
+	if int(grid_coord.x + grid_coord.y) % 8 == 0:
+		surftool = gen_platform(surftool, size / 4, my_height + 300)
+	if int(grid_coord.x + grid_coord.y) % 8 == 0:
+		surftool = gen_platform(surftool, size / 4, my_height + 400)
+	if int(grid_coord.x + grid_coord.y) % 8 == 0:
+		surftool = gen_platform(surftool, size / 4, my_height + 600)
 	#Generate Normal Map
 	surftool.generate_normals()
 	a_mesh = surftool.commit()
@@ -117,13 +107,6 @@ func create_collision():
 	if get_child_count() > 0:
 		get_child(0).queue_free()
 	create_trimesh_collision()
-
-
-# #update chunk to check if near viewer
-# func update_chunk(view_pos: Vector2, max_view_dis):
-# 	var viewer_distance = position_coord.distance_to(view_pos)
-# 	var _is_visible = viewer_distance <= max_view_dis
-# 	#set_chunk_visible(_is_visible)
 
 
 #SLOW
