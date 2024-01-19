@@ -4,8 +4,8 @@
 [ext_resource type="Script" path="res://score.gd" id="2_k7pnr"]
 [ext_resource type="Script" path="res://InfiniteTerrain.gd" id="4_k65ja"]
 [ext_resource type="Script" path="res://InfinitePlatforms.gd" id="5_0kfao"]
-[ext_resource type="PackedScene" uid="uid://xxbd64a50fk1" path="res://TerrainChunk.tscn" id="5_6v3y8"]
-[ext_resource type="PackedScene" uid="uid://usenn6sfc5o5" path="res://PlatformChunk.tscn" id="6_d4cdj"]
+[ext_resource type="PackedScene" uid="uid://xxbd64a50fk1" path="res://ChunkTerrain.tscn" id="5_6v3y8"]
+[ext_resource type="PackedScene" uid="uid://usenn6sfc5o5" path="res://ChunkPlatform.tscn" id="6_d4cdj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wiaf0"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
