@@ -52,8 +52,8 @@ func game_over():
 
 
 func _process(_delta):
-	var height = round(abs(ball_position.y) / Globals.CHUNK_SIZE)
-	var distance = round((abs(ball_position.x) + abs(ball_position.z)) / Globals.CHUNK_SIZE)
+	var height = max(round(abs(ball_position.y) / Globals.CHUNK_SIZE), 1)
+	var distance = max(round((abs(ball_position.x) + abs(ball_position.z)) / Globals.CHUNK_SIZE), 1)
 	score = round(distance * height)
 	high_score = max(score, high_score)
 	var score_label = get_node("/root/Level/ScoreLabel")

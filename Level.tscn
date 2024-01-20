@@ -44,11 +44,12 @@ shadow_enabled = true
 
 [node name="ScoreLabel" type="RichTextLabel" parent="."]
 clip_contents = false
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 297.0
+offset_bottom = 384.0
 theme = SubResource("Theme_680pe")
+fit_content = true
 scroll_active = false
-autowrap_mode = 0
+autowrap_mode = 2
 script = ExtResource("2_k7pnr")
 
 [node name="InfiniteTerrain" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
