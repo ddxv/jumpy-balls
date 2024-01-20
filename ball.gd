@@ -19,6 +19,18 @@ var last_position
 var camera_rig
 var floor_check
 
+##########GPT
+# extends KinematicBody2D
+
+var speed := 400  # Adjust speed as needed
+
+var velocity := Vector3.ZERO
+var start_touch_position := Vector2.ZERO
+var current_touch_position := Vector2.ZERO
+var is_touching := false
+var touch_time := 0.0
+var max_touch_time_for_jump := 0.2  # Time threshold to consider a touch as a jump
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -51,8 +63,23 @@ func _process(_delta):
 	score_label.text += " High Score: " + str(high_score)
 
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		is_touching = event.pressed
+		if is_touching:
+			start_touch_position = event.position
+			touch_time = 0
+		else:
+			velocity.x = 0
+
+	elif event is InputEventScreenDrag:
+		# start_touch_position = event.position
+		current_touch_position = event.position
+
+
 func _physics_process(delta):
 	var glide_direction = Vector3(0, 0, 0)
+	var intent_direction = Vector3(0, 0, 0)
 	# var camera_position: Vector3 = camera_rig.global_transform.origin
 	ball_position = global_transform.origin
 	var camera_position = ball_position + Vector3(0, 4, 4)
@@ -61,20 +88,47 @@ func _physics_process(delta):
 
 	var moving_dir: Vector3 = last_position.direction_to(ball_position)
 
+	###GPT
+	if is_touching:
+		touch_time += delta
+		if touch_time > max_touch_time_for_jump:
+			velocity.x = (
+				(current_touch_position.x - start_touch_position.x) * MAX_FORCE / 90 * delta
+			)
+			print("TOUCH vel=", velocity, start_touch_position)
+			apply_central_force(velocity)
+			angular_velocity.z += rolling_force * delta * -velocity.x
+			glide_direction.x = 2 * delta * velocity.x
+	else:
+		if touch_time > 0 and touch_time <= max_touch_time_for_jump:
+			if floor_check.is_colliding():
+				# velocity.y = JUMP_FORCE * 2
+				# apply_central_force(velocity)
+				print("jump")
+				#apply_impulse(Vector3(), Vector3.UP*1000)
+				glide_direction.y = 1
+				apply_central_impulse(moving_dir * MAX_FORCE + glide_direction * MAX_FORCE)
+			else:
+				print("air jump")
+				apply_central_impulse(cam_to_ball_dir * JUMP_FORCE)
+		touch_time = 0
+
 	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 2, 3), 1)
+
 	# As the ball moves, move the raycast along with it
 	floor_check.global_transform.origin = global_transform.origin
 	# if Input.is_action_pressed("move_forward"):
 	angular_velocity.x -= rolling_force * delta
-	glide_direction.y = 1
-	if Input.is_action_pressed("move_back"):
-		angular_velocity.x += rolling_force * delta
-	if Input.is_action_pressed("move_left"):
-		angular_velocity.z += rolling_force * delta
-		glide_direction.x = -1
-	elif Input.is_action_pressed("move_right"):
-		angular_velocity.z -= rolling_force * delta
-		glide_direction.x = 1
+	#glide_direction.y = 1
+
+	# if Input.is_action_pressed("move_back"):
+	#     angular_velocity.x += rolling_force * delta
+	# if Input.is_action_pressed("move_left"):
+	#     angular_velocity.z += rolling_force * delta
+	#     glide_direction.x = -1
+	# elif Input.is_action_pressed("move_right"):
+	#     angular_velocity.z -= rolling_force * delta
+	#     glide_direction.x = 1
 	# Clamping angular velocity to MAX_SPIN
 	angular_velocity.x = clamp(angular_velocity.x, -MAX_SPIN, MAX_SPIN)
 	angular_velocity.y = clamp(angular_velocity.y, -MAX_SPIN, MAX_SPIN)
@@ -82,14 +136,8 @@ func _physics_process(delta):
 	# print("my angular", angular_velocity)
 	# When the ball is on the floor and the user presses jump button,
 	# add impulse moving the ball up.
-	if Input.is_action_just_pressed("jump"):
-		if floor_check.is_colliding():
-			print("jump")
-			#apply_impulse(Vector3(), Vector3.UP*1000)
-			apply_central_impulse(moving_dir * MAX_FORCE + Vector3(0, 1, 0) * MAX_FORCE)
-		else:
-			print("air jump")
-			apply_central_impulse(cam_to_ball_dir * JUMP_FORCE)
+	# if Input.is_action_just_pressed("jump"):
+
 	if not floor_check.is_colliding():
 		glide_direction += Vector3(0, -2, 0)
 		apply_central_impulse(glide_direction)

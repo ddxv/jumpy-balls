@@ -90,7 +90,7 @@ func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly
 	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	#create Platfrom paths
-	print("try: mygrid", grid_coord, "south:", grid_coord_south)
+	# print("try: mygrid", grid_coord, "south:", grid_coord_south)
 	if int(grid_coord.x + grid_coord.y) % 4 == 0:
 		surftool = gen_platform(surftool, size, my_height, true)
 		surftool = gen_platform(surftool, size, my_height_3f, true)
