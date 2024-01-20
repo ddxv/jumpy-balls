@@ -10,8 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://cxc4qgpj5kxwv" path="res://ChunkWater.tscn" id="8_48306"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wiaf0"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+sky_top_color = Color(0, 0.470588, 0.796078, 1)
+sky_horizon_color = Color(0, 0.603922, 0.909804, 1)
+ground_bottom_color = Color(0, 0.588235, 0.27451, 1)
+ground_horizon_color = Color(0.0705882, 0.607843, 0.505882, 1)
 
 [sub_resource type="Sky" id="Sky_lxm1k"]
 sky_material = SubResource("ProceduralSkyMaterial_wiaf0")
@@ -19,6 +21,7 @@ sky_material = SubResource("ProceduralSkyMaterial_wiaf0")
 [sub_resource type="Environment" id="Environment_atsvh"]
 background_mode = 2
 sky = SubResource("Sky_lxm1k")
+reflected_light_source = 1
 tonemap_mode = 2
 glow_enabled = true
 
