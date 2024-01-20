@@ -40,7 +40,7 @@ func game_over():
 
 
 func _process(_delta):
-	var height = round(abs(ball_position.z) / Globals.CHUNK_SIZE)
+	var height = round(abs(ball_position.y) / Globals.CHUNK_SIZE)
 	var distance = round((abs(ball_position.x) + abs(ball_position.z)) / Globals.CHUNK_SIZE)
 	score = round(distance * height)
 	high_score = max(score, high_score)
@@ -53,8 +53,9 @@ func _process(_delta):
 
 func _physics_process(delta):
 	var glide_direction = Vector3(0, 0, 0)
-	var camera_position: Vector3 = camera_rig.global_transform.origin
+	# var camera_position: Vector3 = camera_rig.global_transform.origin
 	ball_position = global_transform.origin
+	var camera_position = ball_position + Vector3(0, 4, 4)
 
 	var cam_to_ball_dir: Vector3 = camera_position.direction_to(ball_position)
 
@@ -63,10 +64,10 @@ func _physics_process(delta):
 	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 2, 3), 1)
 	# As the ball moves, move the raycast along with it
 	floor_check.global_transform.origin = global_transform.origin
-	if Input.is_action_pressed("move_forward"):
-		angular_velocity.x -= rolling_force * delta
-		glide_direction.y = 1
-	elif Input.is_action_pressed("move_back"):
+	# if Input.is_action_pressed("move_forward"):
+	angular_velocity.x -= rolling_force * delta
+	glide_direction.y = 1
+	if Input.is_action_pressed("move_back"):
 		angular_velocity.x += rolling_force * delta
 	if Input.is_action_pressed("move_left"):
 		angular_velocity.z += rolling_force * delta

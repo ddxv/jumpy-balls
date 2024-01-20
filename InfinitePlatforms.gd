@@ -58,7 +58,7 @@ func update_visible_chunk():
 					terrain_chunks[view_chunk_coord].generate_platforms(
 						current_h, view_chunk_coord, Globals.CHUNK_SIZE, true
 					)
-			else:
+			elif y_offset > 1:
 				#if chunk doesnt exist, create chunk
 				#print(view_chunk_coord)
 				var chunk: ChunkPlatform = chunk_mesh_scene.instantiate()
