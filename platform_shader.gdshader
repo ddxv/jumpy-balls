@@ -16,7 +16,6 @@ void fragment() {
 	vec3 final_color = mix(lowplatform,highplatform,weight);
 	
 	ALBEDO = final_color.rgb;
-	//ALBEDO = lava_color;
 	
 }
 void vertex(){

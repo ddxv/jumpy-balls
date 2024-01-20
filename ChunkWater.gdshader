@@ -10,7 +10,6 @@ void fragment() {
 	
 	vec3 grass = texture(terrain_water,UV*uvscale).rgb;
 	
-	
 	ALBEDO = grass.rgb;
 
 	

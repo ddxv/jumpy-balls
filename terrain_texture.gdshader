@@ -16,8 +16,8 @@ void fragment() {
 	float weight = smoothstep(min_lava_height,min_grass_height,vert_weight);
 	vec3 final_color = mix(lava,grass,weight);
 	
-	ALBEDO = final_color.rgb;
-	//ALBEDO = lava_color;
+	ALBEDO = grass.rgb;
+
 	
 }
 void vertex(){
