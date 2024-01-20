@@ -113,7 +113,7 @@ func _physics_process(delta):
 				apply_central_impulse(cam_to_ball_dir * JUMP_FORCE)
 		touch_time = 0
 
-	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 2, 3), 1)
+	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 4, 4), 1)
 
 	# As the ball moves, move the raycast along with it
 	floor_check.global_transform.origin = global_transform.origin
