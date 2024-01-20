@@ -26,7 +26,7 @@ glow_enabled = true
 default_font_size = 44
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_niqrs"]
-frequency = 0.001
+frequency = 0.0009
 
 [node name="Level" type="Node3D"]
 
