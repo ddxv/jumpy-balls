@@ -19,6 +19,8 @@ var grid_coord = Vector2()
 
 var set_collision = false
 
+var my_multiplier = 0
+
 
 func gen_platform(surftool: SurfaceTool, size: int, my_height: int, is_ramp: bool):
 	var platform_width = size / 4
@@ -73,8 +75,13 @@ func gen_platform(surftool: SurfaceTool, size: int, my_height: int, is_ramp: boo
 
 
 func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly_visible: bool):
+	if my_multiplier == 0 and multiplier > 0:
+		my_multiplier = multiplier
 	#set 2D position in world space
 	grid_coord = coords
+	var my_height = my_multiplier * RAMP_HEIGHT
+	var my_height_2f = (my_multiplier * RAMP_HEIGHT) + RAMP_HEIGHT
+	var my_height_3f = (my_multiplier * RAMP_HEIGHT) + RAMP_HEIGHT * 2
 	var grid_coord_south = grid_coord + Vector2(0, 1)
 	var grid_coord_south_south = grid_coord + Vector2(0, 2)
 	var grid_coord_south_south_south = grid_coord + Vector2(0, 3)
@@ -85,13 +92,13 @@ func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly
 	#create Platfrom paths
 	print("try: mygrid", grid_coord, "south:", grid_coord_south)
 	if int(grid_coord.x + grid_coord.y) % 4 == 0:
-		surftool = gen_platform(surftool, size, multiplier * RAMP_HEIGHT, true)
-		surftool = gen_platform(surftool, size, RAMP_HEIGHT * 3, true)
+		surftool = gen_platform(surftool, size, my_height, true)
+		surftool = gen_platform(surftool, size, my_height_3f, true)
 	if int(grid_coord_south.x + grid_coord_south.y) % 4 == 0:
-		surftool = gen_platform(surftool, size, RAMP_HEIGHT, false)
-		surftool = gen_platform(surftool, size, RAMP_HEIGHT * 3, false)
+		surftool = gen_platform(surftool, size, my_height_2f, false)
+		surftool = gen_platform(surftool, size, my_height_3f, false)
 	if int(grid_coord_south_south.x + grid_coord_south_south.y) % 4 == 0:
-		surftool = gen_platform(surftool, size, RAMP_HEIGHT, true)
+		surftool = gen_platform(surftool, size, my_height_2f, true)
 	# if int(grid_coord_south_south_south.x + grid_coord_south_south_south.y) % 4 == 0:
 	# 	surftool = gen_platform(surftool, size, RAMP_HEIGHT, false)
 	# SECOND LEVEL OF PLATFORMS START

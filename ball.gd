@@ -11,6 +11,7 @@ var last_contact_count = 0
 var motion = Vector3()
 var rolling_force = 40
 var score = 0
+var high_score = 0
 var is_on_ground = false  # Variable to check if the player is on the ground
 
 var ball_position
@@ -39,9 +40,15 @@ func game_over():
 
 
 func _process(_delta):
-	score = round(abs(ball_position.x) + abs(ball_position.z))
+	var height = round(abs(ball_position.z) / Globals.CHUNK_SIZE)
+	var distance = round((abs(ball_position.x) + abs(ball_position.z)) / Globals.CHUNK_SIZE)
+	score = round(distance * height)
+	high_score = max(score, high_score)
 	var score_label = get_node("/root/Level/ScoreLabel")
-	score_label.text = "Score: " + str(score)
+	score_label.text = " Distance: " + str(distance)
+	score_label.text += " Height: " + str(height)
+	score_label.text += " Score: " + str(score)
+	score_label.text += " High Score: " + str(high_score)
 
 
 func _physics_process(delta):
