@@ -52,8 +52,8 @@ func game_over():
 
 
 func _process(_delta):
-	var height = round(abs(ball_position.y) / Globals.CHUNK_SIZE)
-	var distance = round((abs(ball_position.x) + abs(ball_position.z)) / Globals.CHUNK_SIZE)
+	var height = max(round(abs(ball_position.y) / Globals.CHUNK_SIZE), 1)
+	var distance = max(round((abs(ball_position.x) + abs(ball_position.z)) / Globals.CHUNK_SIZE), 1)
 	score = round(distance * height)
 	high_score = max(score, high_score)
 	var score_label = get_node("/root/Level/ScoreLabel")
@@ -113,7 +113,7 @@ func _physics_process(delta):
 				apply_central_impulse(cam_to_ball_dir * JUMP_FORCE)
 		touch_time = 0
 
-	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 2, 3), 1)
+	camera_rig.global_transform.origin = lerp(camera_position, ball_position + Vector3(0, 4, 4), 1)
 
 	# As the ball moves, move the raycast along with it
 	floor_check.global_transform.origin = global_transform.origin
