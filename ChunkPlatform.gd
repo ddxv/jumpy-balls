@@ -111,9 +111,24 @@ func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly
 	#Generate Normal Map
 	surftool.generate_normals()
 	a_mesh = surftool.commit()
+
 	mesh = a_mesh
+
+	var material = mesh.get_surface_override_material()
+	var a = mesh.get_active_material(0)
+
+	match my_height:
+		1:
+			material.albedo_color = Color(1, 0, 0)  # Red
+		2:
+			material.albedo_color = Color(0, 0, 1)  # Blue
+		3:
+			material.albedo_color = Color(1, 1, 0)  # Yellow
+	surftool.set_material(material)
+
 	if set_collision:
 		create_collision()
+
 	#set to invisible on start
 	set_chunk_visible(initailly_visible)
 	Utils.add_to_group_recursive(self, "speed_ramp")
