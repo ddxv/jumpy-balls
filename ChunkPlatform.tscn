@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://usenn6sfc5o5"]
 
+[ext_resource type="Texture2D" uid="uid://bsa6hyr73o4vd" path="res://textures/yellow_brick_1.png" id="1_3k4g2"]
 [ext_resource type="Script" path="res://ChunkPlatform.gd" id="1_55g0w"]
-[ext_resource type="Texture2D" uid="uid://bg0d7fw3xfqxy" path="res://textures/cyanpink_cloud.png" id="2_ofs2r"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o44or"]
-albedo_texture = ExtResource("2_ofs2r")
+albedo_texture = ExtResource("1_3k4g2")
 
 [node name="PlatformsChunk" type="MeshInstance3D"]
 material_override = SubResource("StandardMaterial3D_o44or")
