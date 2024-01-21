@@ -83,6 +83,12 @@ func _physics_process(delta):
 	var cam_to_ball_dir: Vector3 = camera_position.direction_to(ball_position)
 	var moving_dir: Vector3 = last_position.direction_to(ball_position)
 
+	if floor_check.is_colliding():
+		var collider = floor_check.get_collider()
+		if collider.is_in_group("speed_ramp"):
+			print("ON RAMP!")
+			velocity = (moving_dir + Vector3(0, 5, -6)) * base_speed * 1000
+
 	if is_touching:
 		touch_time += delta
 		if touch_time > max_touch_time_for_jump:
@@ -104,15 +110,17 @@ func _physics_process(delta):
 				print("air jump")
 				apply_central_impulse(cam_to_ball_dir * JUMP_FORCE)
 			is_jump = false
+		else:
+			apply_central_force(velocity)
 		touch_time = 0
+
+	# Steady forward rolling addition
+	angular_velocity.x -= rolling_force * delta
 
 	# As the ball moves, move other objects with it
 	# camera_rig.global_transform.origin = lerp(camera_position, camera_position, 1)
 	camera_rig.global_transform.origin = camera_position
 	floor_check.global_transform.origin = global_transform.origin
-
-	# Steady forward rolling addition
-	angular_velocity.x -= rolling_force * delta
 
 	# Clamping angular velocity to MAX_SPIN
 	angular_velocity.x = clamp(angular_velocity.x, -MAX_SPIN, MAX_SPIN)

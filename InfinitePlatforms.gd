@@ -61,6 +61,7 @@ func update_visible_chunk():
 				#if chunk doesnt exist, create chunk
 				#print(view_chunk_coord)
 				var chunk: ChunkPlatform = chunk_mesh_scene.instantiate()
+				chunk.add_to_group("speed_ramp")
 				add_child(chunk)
 				#set chunk parameters
 				chunk.terrain_max_height = terrain_height - y_offset * Globals.CHUNK_SIZE
