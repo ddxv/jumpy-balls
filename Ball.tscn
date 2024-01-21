@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d0xs7f40ag8qe" path="res://textures/blue_ball_pixel_art.jpeg" id="2_bfqv3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e8uyb"]
+friction = 2.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_386sv"]
 
@@ -19,6 +20,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 transform = Transform3D(1, 0, 0, 0, 0.939692, 0.34202, 0, -0.34202, 0.939692, 0, 4, 4)
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig"]
+fov = 99.4
 
 [node name="MyBall" type="RigidBody3D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_e8uyb")
