@@ -22,7 +22,7 @@ var set_collision = false
 var death_height = Globals.DEATH_HEIGHT
 
 
-func generate_water(coords: Vector2, size: float, initailly_visible: bool):
+func generate_water(coords: Vector2, size: int, initailly_visible: bool):
 	terrain_size = size
 	#set 2D position in world space
 	grid_coord = coords

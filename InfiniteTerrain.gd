@@ -17,7 +17,7 @@ var last_visible_chunks = []
 
 func _ready():
 	#set the total chunks to be visible
-	chunksvisible = roundi(Globals.VIEW_DISTANCE / Globals.CHUNK_SIZE)
+	chunksvisible = roundi(Globals.VIEW_DISTANCE / float(Globals.CHUNK_SIZE))
 	viewer = viewer.get_node("MyBall")
 	if render_debug:
 		set_wireframe()
@@ -50,7 +50,7 @@ func update_visible_chunk():
 			var view_chunk_coord = Vector2(current_x - x_offset, current_y - y_offset)
 			#check if chunk was already created
 			if terrain_chunks.has(view_chunk_coord):
-				var ref = weakref(terrain_chunks[view_chunk_coord])
+				# var ref = weakref(terrain_chunks[view_chunk_coord])
 				#if chunk exist update the chunk passing viewer_position and view_distance
 				# terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
 				if terrain_chunks[view_chunk_coord].update_lod(viewer_position):

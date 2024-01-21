@@ -23,7 +23,7 @@ var my_multiplier = 0
 
 
 func gen_platform(surftool: SurfaceTool, size: int, my_height: int, is_ramp: bool):
-	var platform_width = size / 4
+	var platform_width = roundi(size / float(4))
 	var my_ramp_height = 0
 
 	if is_ramp:
@@ -74,7 +74,7 @@ func gen_platform(surftool: SurfaceTool, size: int, my_height: int, is_ramp: boo
 	return surftool
 
 
-func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly_visible: bool):
+func generate_platforms(multiplier: int, coords: Vector2, size: int, initailly_visible: bool):
 	if my_multiplier == 0 and multiplier > 0:
 		my_multiplier = multiplier
 	#set 2D position in world space
@@ -84,7 +84,7 @@ func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly
 	var my_height_3f = (my_multiplier * RAMP_HEIGHT) + RAMP_HEIGHT * 2
 	var grid_coord_south = grid_coord + Vector2(0, 1)
 	var grid_coord_south_south = grid_coord + Vector2(0, 2)
-	var grid_coord_south_south_south = grid_coord + Vector2(0, 3)
+	# var grid_coord_south_south_south = grid_coord + Vector2(0, 3)
 	position_coord = coords * size
 	var a_mesh: ArrayMesh
 	var surftool = SurfaceTool.new()
