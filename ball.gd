@@ -90,7 +90,7 @@ func _physics_process(delta):
 			print("TOUCH vel=", velocity)
 			apply_central_force(velocity)
 			angular_velocity.z += rolling_force * delta * -velocity.x
-			glide_direction.x = base_speed * delta * velocity.x
+			glide_direction.x = velocity.x / 10
 	else:
 		if is_jump:
 			if floor_check.is_colliding():
