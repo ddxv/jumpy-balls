@@ -29,7 +29,7 @@ glow_enabled = true
 default_font_size = 44
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_niqrs"]
-frequency = 0.0009
+frequency = 0.0006
 
 [node name="Level" type="Node3D"]
 
@@ -61,7 +61,6 @@ terrain_height = 200
 
 [node name="InfinitePlatforms" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
 script = ExtResource("5_0kfao")
-view_distance = 2000
 viewer = NodePath("../Ball")
 chunk_mesh_scene = ExtResource("6_d4cdj")
 

@@ -34,4 +34,4 @@ surface_material_override/0 = SubResource("StandardMaterial3D_p4o65")
 shape = SubResource("SphereShape3D_pdw4n")
 
 [node name="FloorCheck" type="RayCast3D" parent="."]
-target_position = Vector3(0, -1.5, 0)
+target_position = Vector3(0, -2, 0)

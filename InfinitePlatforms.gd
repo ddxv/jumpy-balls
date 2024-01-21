@@ -1,8 +1,7 @@
 extends Node3D
 
-# @export var chunk_size = 100
 @export var terrain_height = 20
-@export var view_distance = 500
+# @export var view_distance = 500
 @export var viewer: Node3D
 @export var chunk_mesh_scene: PackedScene
 @export var render_debug := false
@@ -64,7 +63,7 @@ func update_visible_chunk():
 				var chunk: ChunkPlatform = chunk_mesh_scene.instantiate()
 				add_child(chunk)
 				#set chunk parameters
-				chunk.terrain_max_height = terrain_height
+				chunk.terrain_max_height = terrain_height - y_offset * Globals.CHUNK_SIZE
 				#set chunk world position
 				var pos = view_chunk_coord * Globals.CHUNK_SIZE
 				var world_position = Vector3(pos.x, 0, pos.y)
