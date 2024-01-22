@@ -130,16 +130,6 @@ func generate_platforms(multiplier: int, coords: Vector2, size: int, initailly_v
 	# 	elif multiplier == 2:
 	# 		material.albedo_color = Color(0, 0, 1)  # RGB for red
 
-	# # Access materials of individual surfaces
-	# var num_surfaces = mesh.get_surface_count()
-	# for i in range(num_surfaces):
-	#       var material_1 = mesh.get_surface_material(i)
-	#       print("Material of surface ", i, ": ", material_1)
-
-	# var material = $MeshInstance3D.material_override
-	# var material = MeshInstance3D.get_surface_material(0)
-	# print("CHECK", material)
-
 	if set_collision:
 		create_collision()
 	#set to invisible on start

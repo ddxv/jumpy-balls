@@ -1,13 +1,13 @@
 shader_type spatial;
 
 uniform sampler2D text_low;
-uniform vec2 uvscale = vec2(1);
+const vec2 uvscale = vec2(1);
 
 // Define colors
-uniform vec3 green_color = vec3(0.0, 1.0, 0.0); // Green
-uniform vec3 yellow_color = vec3(1.0, 1.0, 0.0); // Yellow
-uniform vec3 red_color = vec3(1.0, 0.0, 0.0); // Red
-uniform vec3 purple_color = vec3(0.5, 0.0, 0.5); // Purple
+const vec3 green_color = vec3(0.0, 1.0, 0.0); // Green
+const vec3 yellow_color = vec3(1.0, 1.0, 0.0); // Yellow
+const vec3 red_color = vec3(1.0, 0.0, 0.0); // Red
+const vec3 purple_color = vec3(0.5, 0.0, 0.5); // Purple
 
 varying float vertex_y;
 

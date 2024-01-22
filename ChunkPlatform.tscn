@@ -7,11 +7,6 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_knkn6"]
 render_priority = 0
 shader = ExtResource("1_2oqjh")
-shader_parameter/uvscale = Vector2(1, 1)
-shader_parameter/green_color = Vector3(0, 1, 0)
-shader_parameter/yellow_color = Vector3(1, 1, 0)
-shader_parameter/red_color = Vector3(1, 0, 0)
-shader_parameter/purple_color = Vector3(0.5, 0, 0.5)
 shader_parameter/text_low = ExtResource("1_3k4g2")
 
 [node name="PlatformsChunk" type="MeshInstance3D"]
