@@ -1,11 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://usenn6sfc5o5"]
+[gd_scene load_steps=5 format=3 uid="uid://usenn6sfc5o5"]
 
+[ext_resource type="Shader" path="res://platform_shader.gdshader" id="1_2oqjh"]
 [ext_resource type="Texture2D" uid="uid://bsa6hyr73o4vd" path="res://textures/yellow_brick_1.png" id="1_3k4g2"]
 [ext_resource type="Script" path="res://ChunkPlatform.gd" id="1_55g0w"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o44or"]
-albedo_texture = ExtResource("1_3k4g2")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_knkn6"]
+render_priority = 0
+shader = ExtResource("1_2oqjh")
+shader_parameter/uvscale = Vector2(1, 1)
+shader_parameter/green_color = Vector3(0, 1, 0)
+shader_parameter/yellow_color = Vector3(1, 1, 0)
+shader_parameter/red_color = Vector3(1, 0, 0)
+shader_parameter/purple_color = Vector3(0.5, 0, 0.5)
+shader_parameter/text_low = ExtResource("1_3k4g2")
 
 [node name="PlatformsChunk" type="MeshInstance3D"]
-material_override = SubResource("StandardMaterial3D_o44or")
+material_override = SubResource("ShaderMaterial_knkn6")
 script = ExtResource("1_55g0w")

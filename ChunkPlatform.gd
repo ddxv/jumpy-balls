@@ -100,7 +100,7 @@ func generate_platforms(multiplier: int, coords: Vector2, size: int, initailly_v
 	if int(grid_coord_south_south.x + grid_coord_south_south.y) % 4 == 0:
 		surftool = gen_platform(surftool, size, my_height_2f, true)
 	# if int(grid_coord_south_south_south.x + grid_coord_south_south_south.y) % 4 == 0:
-	# 	surftool = gen_platform(surftool, size, RAMP_HEIGHT, false)
+	#   surftool = gen_platform(surftool, size, RAMP_HEIGHT, false)
 	# SECOND LEVEL OF PLATFORMS START
 	# if int(grid_coord_south.x + grid_coord_south.y) % 4 == 0:
 	# if int(grid_coord_south_south.x + grid_coord_south_south.y) % 4 == 0:
@@ -112,6 +112,34 @@ func generate_platforms(multiplier: int, coords: Vector2, size: int, initailly_v
 	surftool.generate_normals()
 	a_mesh = surftool.commit()
 	mesh = a_mesh
+
+	# Access the MeshInstance3D node
+	# var mesh_instance = $MeshInstance3D
+
+	# # Access the material override
+	# var material = material_override
+	# if material:
+	# 	print("Material Override: ", material)
+	# 	var current_albedo = material.albedo_color
+	# 	print("Current Albedo Color: ", current_albedo)
+	# 	# Set the albedo color to red
+	# 	if multiplier == 0:
+	# 		material.albedo_color = Color(1, 0, 0)  # RGB for red
+	# 	elif multiplier == 1:
+	# 		material.albedo_color = Color(0, 1, 0)  # RGB for red
+	# 	elif multiplier == 2:
+	# 		material.albedo_color = Color(0, 0, 1)  # RGB for red
+
+	# # Access materials of individual surfaces
+	# var num_surfaces = mesh.get_surface_count()
+	# for i in range(num_surfaces):
+	#       var material_1 = mesh.get_surface_material(i)
+	#       print("Material of surface ", i, ": ", material_1)
+
+	# var material = $MeshInstance3D.material_override
+	# var material = MeshInstance3D.get_surface_material(0)
+	# print("CHECK", material)
+
 	if set_collision:
 		create_collision()
 	#set to invisible on start
