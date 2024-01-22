@@ -15,7 +15,7 @@ var last_visible_chunks = []
 
 func _ready():
 	#set the total chunks to be visible
-	chunksvisible = roundi(Globals.VIEW_DISTANCE / Globals.CHUNK_SIZE)
+	chunksvisible = roundi(Globals.VIEW_DISTANCE / float(Globals.CHUNK_SIZE))
 	viewer = viewer.get_node("MyBall")
 	if render_debug:
 		set_wireframe()
@@ -45,31 +45,31 @@ func update_visible_chunk():
 	var current_h = roundi(viewer_h / Globals.CHUNK_SIZE)
 	#get all the chunks within visiblity range
 	for y_offset in range(0, chunksvisible):
-		for x_offset in range(-chunksvisible, chunksvisible):
+		for x_offset in range(-chunksvisible - 2, chunksvisible - 2):
 			#create a new chunk coordinate
 			var view_chunk_coord = Vector2(current_x - x_offset, current_y - y_offset)
 			#check if chunk was already created
-			if terrain_chunks.has(view_chunk_coord):
-				# var ref = weakref(terrain_chunks[view_chunk_coord])
-				#if chunk exist update the chunk passing viewer_position and view_distance
-				# terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
-				if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
-					terrain_chunks[view_chunk_coord].generate_platforms(
-						current_h, view_chunk_coord, Globals.CHUNK_SIZE, true
-					)
-			elif y_offset > 1:
+			# if terrain_chunks.has(view_chunk_coord):
+			# var ref = weakref(terrain_chunks[view_chunk_coord])
+			#if chunk exist update the chunk passing viewer_position and view_distance
+			# terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
+			# if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
+			# 	terrain_chunks[view_chunk_coord].generate_platforms(
+			# 		current_h, view_chunk_coord, Globals.CHUNK_SIZE, true
+			# 	)
+			if y_offset > 1:
 				#if chunk doesnt exist, create chunk
-				#print(view_chunk_coord)
 				var chunk: ChunkPlatform = chunk_mesh_scene.instantiate()
 				chunk.add_to_group("speed_ramp")
 				add_child(chunk)
 				#set chunk parameters
-				chunk.terrain_max_height = terrain_height - y_offset * Globals.CHUNK_SIZE
+				# chunk.terrain_max_height = terrain_height - y_offset * Globals.CHUNK_SIZE
 				#set chunk world position
 				var pos = view_chunk_coord * Globals.CHUNK_SIZE
 				var world_position = Vector3(pos.x, 0, pos.y)
 				chunk.global_position = world_position
-				chunk.generate_platforms(current_h, view_chunk_coord, Globals.CHUNK_SIZE, false)
+				chunk.generate_platforms(current_h, view_chunk_coord, Globals.CHUNK_SIZE, true)
+				add_child(chunk)
 				terrain_chunks[view_chunk_coord] = chunk
 #check if we should remove chunk from scene
 	for chunk in get_children():

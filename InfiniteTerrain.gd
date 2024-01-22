@@ -17,7 +17,7 @@ var last_visible_chunks = []
 
 func _ready():
 	#set the total chunks to be visible
-	chunksvisible = roundi(Globals.VIEW_DISTANCE / Globals.CHUNK_SIZE)
+	chunksvisible = roundi(Globals.VIEW_DISTANCE / float(Globals.CHUNK_SIZE))
 	viewer = viewer.get_node("MyBall")
 	if render_debug:
 		set_wireframe()
@@ -45,7 +45,7 @@ func update_visible_chunk():
 	var current_y = roundi(viewer_position.y / Globals.CHUNK_SIZE)
 	#get all the chunks within visiblity range
 	for y_offset in range(0, chunksvisible):
-		for x_offset in range(-chunksvisible, chunksvisible):
+		for x_offset in range(-chunksvisible - 1, chunksvisible - 1):
 			#create a new chunk coordinate
 			var view_chunk_coord = Vector2(current_x - x_offset, current_y - y_offset)
 			#check if chunk was already created

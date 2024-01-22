@@ -48,7 +48,7 @@ func game_over():
 
 
 func _process(_delta):
-	var height = max(round(abs(ball_position.y) / Globals.CHUNK_SIZE), 1)
+	var height = max(round(abs(ball_position.y) / Globals.RAMP_HEIGHT), 1)
 	var distance = max(round((abs(ball_position.x) + abs(ball_position.z)) / Globals.CHUNK_SIZE), 1)
 	score = round(distance * height)
 	high_score = max(score, high_score)
@@ -76,7 +76,7 @@ func _input(event: InputEvent) -> void:
 
 func _physics_process(delta):
 	var glide_direction = Vector3(0, 0, 0)
-	var base_speed = MAX_FORCE / 90 * delta
+	var base_speed = MAX_FORCE / float(90) * delta
 	velocity = Vector3(0, 0, -2)
 	ball_position = global_transform.origin
 	var camera_position = ball_position + Globals.CAMERA_LOCAL_POSITION

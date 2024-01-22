@@ -2,13 +2,10 @@ class_name ChunkPlatform
 extends MeshInstance3D
 
 const CENTER_OFFSET = 0.5
-const RAMP_HEIGHT = 200
 
-#Terrain size
-@export_range(20, 400, 1) var terrain_size := 200
 #LOD scaling
 @export_range(1, 100, 1) var resolution := 20
-@export var terrain_max_height = 5
+# @export var terrain_max_height = 5
 
 @export var chunk_lods: Array[int] = [2, 4, 8, 15, 20, 50]
 @export var lod_distances: Array[int] = [2000, 1500, 1050, 900, 790, 550]
@@ -17,17 +14,17 @@ const RAMP_HEIGHT = 200
 var position_coord = Vector2()
 var grid_coord = Vector2()
 
-var set_collision = false
+var set_collision = true
 
 var my_multiplier = 0
 
 
 func gen_platform(surftool: SurfaceTool, size: int, my_height: int, is_ramp: bool):
-	var platform_width = size / 4
+	var platform_width = roundi(size / float(4))
 	var my_ramp_height = 0
 
 	if is_ramp:
-		my_ramp_height = RAMP_HEIGHT
+		my_ramp_height = Globals.RAMP_HEIGHT
 
 	var vertices := PackedVector3Array(
 		[
@@ -74,17 +71,17 @@ func gen_platform(surftool: SurfaceTool, size: int, my_height: int, is_ramp: boo
 	return surftool
 
 
-func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly_visible: bool):
+func generate_platforms(multiplier: int, coords: Vector2, size: int, initailly_visible: bool):
 	if my_multiplier == 0 and multiplier > 0:
 		my_multiplier = multiplier
 	#set 2D position in world space
 	grid_coord = coords
-	var my_height = my_multiplier * RAMP_HEIGHT
-	var my_height_2f = (my_multiplier * RAMP_HEIGHT) + RAMP_HEIGHT
-	var my_height_3f = (my_multiplier * RAMP_HEIGHT) + RAMP_HEIGHT * 2
+	var my_height = my_multiplier * Globals.RAMP_HEIGHT
+	var my_height_2f = (my_multiplier * Globals.RAMP_HEIGHT) + Globals.RAMP_HEIGHT
+	var my_height_3f = (my_multiplier * Globals.RAMP_HEIGHT) + Globals.RAMP_HEIGHT * 2
 	var grid_coord_south = grid_coord + Vector2(0, 1)
 	var grid_coord_south_south = grid_coord + Vector2(0, 2)
-	var grid_coord_south_south_south = grid_coord + Vector2(0, 3)
+	# var grid_coord_south_south_south = grid_coord + Vector2(0, 3)
 	position_coord = coords * size
 	var a_mesh: ArrayMesh
 	var surftool = SurfaceTool.new()
@@ -100,7 +97,7 @@ func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly
 	if int(grid_coord_south_south.x + grid_coord_south_south.y) % 4 == 0:
 		surftool = gen_platform(surftool, size, my_height_2f, true)
 	# if int(grid_coord_south_south_south.x + grid_coord_south_south_south.y) % 4 == 0:
-	# 	surftool = gen_platform(surftool, size, RAMP_HEIGHT, false)
+	#   surftool = gen_platform(surftool, size, RAMP_HEIGHT, false)
 	# SECOND LEVEL OF PLATFORMS START
 	# if int(grid_coord_south.x + grid_coord_south.y) % 4 == 0:
 	# if int(grid_coord_south_south.x + grid_coord_south_south.y) % 4 == 0:
@@ -113,18 +110,6 @@ func generate_platforms(multiplier: int, coords: Vector2, size: float, initailly
 	a_mesh = surftool.commit()
 
 	mesh = a_mesh
-
-	var material = mesh.get_surface_override_material()
-	var a = mesh.get_active_material(0)
-
-	match my_height:
-		1:
-			material.albedo_color = Color(1, 0, 0)  # Red
-		2:
-			material.albedo_color = Color(0, 0, 1)  # Blue
-		3:
-			material.albedo_color = Color(1, 1, 0)  # Yellow
-	surftool.set_material(material)
 
 	if set_collision:
 		create_collision()
