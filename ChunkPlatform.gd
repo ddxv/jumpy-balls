@@ -108,29 +108,15 @@ func generate_platforms(multiplier: int, coords: Vector2, size: int, initailly_v
 	#Generate Normal Map
 	surftool.generate_normals()
 	a_mesh = surftool.commit()
+
 	mesh = a_mesh
-
-	# Access the MeshInstance3D node
-	# var mesh_instance = $MeshInstance3D
-
-	# # Access the material override
-	# var material = material_override
-	# if material:
-	# 	print("Material Override: ", material)
-	# 	var current_albedo = material.albedo_color
-	# 	print("Current Albedo Color: ", current_albedo)
-	# 	# Set the albedo color to red
-	# 	if multiplier == 0:
-	# 		material.albedo_color = Color(1, 0, 0)  # RGB for red
-	# 	elif multiplier == 1:
-	# 		material.albedo_color = Color(0, 1, 0)  # RGB for red
-	# 	elif multiplier == 2:
-	# 		material.albedo_color = Color(0, 0, 1)  # RGB for red
 
 	if set_collision:
 		create_collision()
+
 	#set to invisible on start
 	set_chunk_visible(initailly_visible)
+	Utils.add_to_group_recursive(self, "speed_ramp")
 
 
 #create collision

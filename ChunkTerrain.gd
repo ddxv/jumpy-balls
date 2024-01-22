@@ -77,6 +77,7 @@ func generate_terrain(noise: FastNoiseLite, coords: Vector2, size: int, initaill
 		create_collision()
 	#set to invisible on start
 	set_chunk_visibitility(initailly_visible)
+	Utils.add_to_group_recursive(self, "ground")
 
 
 #create collision

@@ -64,6 +64,7 @@ func update_visible_chunk():
 				#print(view_chunk_coord)
 				#if chunk doesnt exist, create chunk
 				var chunk: ChunkTerrain = chunk_mesh_scene.instantiate()
+				# chunk.add_to_group("ground")
 				add_child(chunk)
 				#set chunk parameters
 				chunk.terrain_max_height = terrain_height
@@ -72,6 +73,7 @@ func update_visible_chunk():
 				var world_position = Vector3(pos.x, 0, pos.y)
 				chunk.global_position = world_position
 				chunk.generate_terrain(noise, view_chunk_coord, Globals.CHUNK_SIZE, false)
+				#set chunk parameters
 				terrain_chunks[view_chunk_coord] = chunk
 #check if we should remove chunk from scene
 	for chunk in get_children():

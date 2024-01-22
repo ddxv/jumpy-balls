@@ -7,6 +7,11 @@
 albedo_texture = ExtResource("1_frlgf")
 uv1_scale = Vector3(2, 2, 2)
 
-[node name="TerrainChunk" type="MeshInstance3D"]
+[node name="TerrainChunk" type="MeshInstance3D" groups=["ground"]]
 material_override = SubResource("StandardMaterial3D_kepwc")
 script = ExtResource("1_reb1s")
+terrain_size = null
+resolution = null
+terrain_max_height = null
+chunk_lods = null
+lod_distances = null
