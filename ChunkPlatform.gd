@@ -3,8 +3,6 @@ extends MeshInstance3D
 
 const CENTER_OFFSET = 0.5
 
-# Terrain size
-# @export_range(20, 400, 1) var terrain_size := 200
 #LOD scaling
 @export_range(1, 100, 1) var resolution := 20
 # @export var terrain_max_height = 5
