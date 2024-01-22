@@ -12,3 +12,6 @@ shader_parameter/text_low = ExtResource("1_3k4g2")
 [node name="PlatformsChunk" type="MeshInstance3D"]
 material_override = SubResource("ShaderMaterial_knkn6")
 script = ExtResource("1_55g0w")
+resolution = null
+chunk_lods = null
+lod_distances = null

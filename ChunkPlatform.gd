@@ -14,7 +14,7 @@ const CENTER_OFFSET = 0.5
 var position_coord = Vector2()
 var grid_coord = Vector2()
 
-var set_collision = true
+var set_collision = false
 
 var my_multiplier = 0
 
@@ -111,12 +111,11 @@ func generate_platforms(multiplier: int, coords: Vector2, size: int, initailly_v
 
 	mesh = a_mesh
 
-	if set_collision:
-		create_collision()
-
 	#set to invisible on start
 	set_chunk_visible(initailly_visible)
 	Utils.add_to_group_recursive(self, "speed_ramp")
+	if set_collision:
+		create_collision()
 
 
 #create collision
@@ -124,6 +123,11 @@ func create_collision():
 	if get_child_count() > 0:
 		get_child(0).queue_free()
 	create_trimesh_collision()
+	# var static_body = StaticBody3D.new()
+	# var collision_shape = CollisionShape3D.new()
+	# collision_shape.shape = BoxShape3D.new()
+	# # collision_shape.shape.extents = Vector3(Glo, 1, plane_size_z)
+	# static_body.add_child(collision_shape)
 
 
 #SLOW

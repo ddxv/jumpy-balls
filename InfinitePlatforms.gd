@@ -49,15 +49,14 @@ func update_visible_chunk():
 			#create a new chunk coordinate
 			var view_chunk_coord = Vector2(current_x - x_offset, current_y - y_offset)
 			#check if chunk was already created
-			# if terrain_chunks.has(view_chunk_coord):
-			# var ref = weakref(terrain_chunks[view_chunk_coord])
-			#if chunk exist update the chunk passing viewer_position and view_distance
-			# terrain_chunks[view_chunk_coord].update_chunk(viewer_position, view_distance)
-			# if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
-			# 	terrain_chunks[view_chunk_coord].generate_platforms(
-			# 		current_h, view_chunk_coord, Globals.CHUNK_SIZE, true
-			# 	)
-			if y_offset > 1:
+			if terrain_chunks.has(view_chunk_coord):
+				# var ref = weakref(terrain_chunks[view_chunk_coord])
+				#if chunk exist update the chunk passing viewer_position and view_distance
+				if terrain_chunks[view_chunk_coord].update_lod(viewer_position):
+					terrain_chunks[view_chunk_coord].generate_platforms(
+						current_h, view_chunk_coord, Globals.CHUNK_SIZE, true
+					)
+			elif y_offset > 1:
 				#if chunk doesnt exist, create chunk
 				var chunk: ChunkPlatform = chunk_mesh_scene.instantiate()
 				chunk.add_to_group("speed_ramp")
@@ -69,7 +68,6 @@ func update_visible_chunk():
 				var world_position = Vector3(pos.x, 0, pos.y)
 				chunk.global_position = world_position
 				chunk.generate_platforms(current_h, view_chunk_coord, Globals.CHUNK_SIZE, true)
-				add_child(chunk)
 				terrain_chunks[view_chunk_coord] = chunk
 #check if we should remove chunk from scene
 	for chunk in get_children():
