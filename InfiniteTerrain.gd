@@ -45,7 +45,7 @@ func update_visible_chunk():
 	var current_y = roundi(viewer_position.y / Globals.CHUNK_SIZE)
 	#get all the chunks within visiblity range
 	for y_offset in range(0, chunksvisible):
-		for x_offset in range(-chunksvisible, chunksvisible):
+		for x_offset in range(-chunksvisible - 1, chunksvisible - 1):
 			#create a new chunk coordinate
 			var view_chunk_coord = Vector2(current_x - x_offset, current_y - y_offset)
 			#check if chunk was already created
