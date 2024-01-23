@@ -17,6 +17,7 @@ var is_on_ground = false  # Variable to check if the player is on the ground
 var ball_position
 var last_position
 var camera_rig
+var camera
 var floor_check
 
 var velocity := Vector3.ZERO
@@ -35,6 +36,7 @@ func _ready():
 	set_max_contacts_reported(2)
 	var parent = get_parent()
 	camera_rig = parent.get_node("CameraRig")
+	camera = camera_rig.get_node("Camera3D")
 	camera_rig.top_level = true
 	floor_check = parent.get_node("FloorCheck")
 	floor_check.top_level = true
@@ -83,6 +85,7 @@ func _physics_process(delta):
 	var cam_to_ball_dir: Vector3 = camera_position.direction_to(ball_position)
 	var moving_dir: Vector3 = last_position.direction_to(ball_position)
 
+	# RAMP SPEED UP
 	if floor_check.is_colliding():
 		var collider = floor_check.get_collider()
 		if collider.is_in_group("speed_ramp"):
@@ -102,13 +105,20 @@ func _physics_process(delta):
 			if floor_check.is_colliding():
 				moving_dir.y = abs(moving_dir.y)
 				var jump_direction = Vector3(0, 1, 0) + moving_dir
-				print("jump, vel=", velocity)
 				print("jump, dir=", jump_direction)
 				glide_direction.y = 2
-				apply_central_impulse(jump_direction * MAX_FORCE)
+				apply_central_impulse(jump_direction * JUMP_FORCE)
 			else:
-				print("air jump")
-				apply_central_impulse(cam_to_ball_dir * JUMP_FORCE)
+				var target_position = get_ground_target(camera, start_touch_position)
+				var jump_direction
+				if target_position:
+					jump_direction = (target_position - ball_position).normalized()
+					jump_direction.z = -1 * abs(jump_direction.z)
+					print("air jump air dir=", jump_direction)
+				else:
+					jump_direction = cam_to_ball_dir
+					print("air jump regular dir=", jump_direction)
+				apply_central_impulse(jump_direction * JUMP_FORCE * 5)
 			is_jump = false
 		else:
 			apply_central_force(velocity)
@@ -130,9 +140,26 @@ func _physics_process(delta):
 
 	if not floor_check.is_colliding():
 		glide_direction += Vector3(0, -2, 0)
-		print("gliding=", glide_direction)
+		# print("gliding=", glide_direction)
 		apply_central_impulse(glide_direction)
 
 	# TODO: Should be + radius of ball or use floor_check raycast
 	if global_transform.origin.y < Globals.DEATH_HEIGHT + 1:
 		game_over()
+
+
+func get_ground_target(camera, screen_position):
+	var from = camera.project_ray_origin(screen_position)
+	var to = camera.project_ray_normal(screen_position) * 2000
+
+	var query_params = PhysicsRayQueryParameters3D.new()
+	query_params.from = from
+	query_params.to = to
+	query_params.exclude = [self]  # Exclude the ball itself
+	query_params.collision_mask = collision_mask  # Use the appropriate collision mask
+
+	var space_state = get_world_3d().direct_space_state
+	var result = space_state.intersect_ray(query_params)
+	if result and result.has("position"):
+		print("target = ", result.position)
+		return result.position
