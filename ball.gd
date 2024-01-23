@@ -27,6 +27,7 @@ var is_touching := false
 var is_jump := false
 var touch_time := 0.0
 var max_touch_time_for_jump := 0.2  # Time threshold to consider a touch as a jump
+var has_air_jumped
 
 
 # Called when the node enters the scene tree for the first time.
@@ -87,6 +88,7 @@ func _physics_process(delta):
 
 	# RAMP SPEED UP
 	if floor_check.is_colliding():
+		has_air_jumped = false
 		var collider = floor_check.get_collider()
 		if collider.is_in_group("speed_ramp"):
 			print("ON RAMP!")
@@ -108,7 +110,7 @@ func _physics_process(delta):
 				print("jump, dir=", jump_direction)
 				glide_direction.y = 2
 				apply_central_impulse(jump_direction * JUMP_FORCE)
-			else:
+			elif not has_air_jumped:
 				var target_position = get_ground_target(camera, start_touch_position)
 				var jump_direction
 				if target_position:
@@ -117,8 +119,9 @@ func _physics_process(delta):
 					print("air jump air dir=", jump_direction)
 				else:
 					jump_direction = cam_to_ball_dir
-					print("air jump regular dir=", jump_direction)
+					print("air jump missed! target", jump_direction)
 				apply_central_impulse(jump_direction * JUMP_FORCE * 5)
+				has_air_jumped = true
 			is_jump = false
 		else:
 			apply_central_force(velocity)
@@ -160,6 +163,14 @@ func get_ground_target(camera, screen_position):
 
 	var space_state = get_world_3d().direct_space_state
 	var result = space_state.intersect_ray(query_params)
+	var return_position
 	if result and result.has("position"):
 		print("target = ", result.position)
-		return result.position
+		return_position = result.position
+	else:
+		# Fallback position: Point along the ray at a certain distance
+		# Assuming 2000 is the max distance you want to check
+		var fallback_position = from + to.normalized() * abs(from.y) * 1.5
+		print("fallback target = ", fallback_position)
+		return_position = fallback_position
+	return return_position
