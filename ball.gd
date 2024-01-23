@@ -29,6 +29,9 @@ var touch_time := 0.0
 var max_touch_time_for_jump := 0.2  # Time threshold to consider a touch as a jump
 var has_air_jumped
 
+var config = ConfigFile.new()
+var my_file_path = "user://high_score.cfg"
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -42,11 +45,13 @@ func _ready():
 	floor_check = parent.get_node("FloorCheck")
 	floor_check.top_level = true
 	last_position = global_transform.origin
+	high_score = load_high_score()
 
 
 func game_over():
 	# Handle the game over state
 	print("Game Over!")  # Replace this with your game over logic
+	save_high_score(high_score)
 	get_tree().reload_current_scene()
 
 
@@ -174,3 +179,23 @@ func get_ground_target(camera, screen_position):
 		print("fallback target = ", fallback_position)
 		return_position = fallback_position
 	return return_position
+
+
+func save_high_score(high_score):
+	# Write the high score
+	config.set_value("high_score", "score", high_score)
+	# Save the file
+	var error = config.save(my_file_path)
+	if error != OK:
+		print("Failed to save high score: ", error)
+
+
+func load_high_score():
+	# Check if the file exists
+	var error = config.load(my_file_path)
+	if error != OK:
+		print("Failed to load high score: ", error)
+		return 0
+
+	# Get the high score
+	return config.get_value("high_score", "score", 0)  # Default to 0
