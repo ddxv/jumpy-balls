@@ -113,9 +113,11 @@ func _physics_process(delta):
 				var jump_direction
 				if target_position:
 					jump_direction = (target_position - ball_position).normalized()
+					jump_direction.z = -1 * abs(jump_direction.z)
+					print("air jump air dir=", jump_direction)
 				else:
 					jump_direction = cam_to_ball_dir
-				print("air jump dir=", jump_direction)
+					print("air jump regular dir=", jump_direction)
 				apply_central_impulse(jump_direction * JUMP_FORCE * 5)
 			is_jump = false
 		else:
@@ -159,4 +161,5 @@ func get_ground_target(camera, screen_position):
 	var space_state = get_world_3d().direct_space_state
 	var result = space_state.intersect_ray(query_params)
 	if result and result.has("position"):
+		print("target = ", result.position)
 		return result.position
