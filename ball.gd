@@ -174,3 +174,36 @@ func get_ground_target(camera, screen_position):
 		print("fallback target = ", fallback_position)
 		return_position = fallback_position
 	return return_position
+
+
+func save_high_score(high_score):
+	var config = ConfigFile()
+	var file_path = "user://high_score.cfg"
+
+	# Write the high score
+	config.set_value("high_score", "score", high_score)
+
+	# Save the file
+	var error = config.save(file_path)
+	if error != OK:
+		print("Failed to save high score: ", error)
+
+
+func load_high_score():
+	var config = ConfigFile()
+	var file_path = "user://high_score.cfg"
+
+	# Check if the file exists
+	if not File.new().file_exists(file_path):
+		return 0  # Return a default high score of 0 if file does not exist
+
+		# Load the file
+
+		# Get the high score
+	var error = config.load(file_path)
+	if error != OK:
+		print("Failed to load high score: ", error)
+		return 0
+
+		# Get the high score
+	return config.get_value("high_score", "score", 0)  # Default to 0
