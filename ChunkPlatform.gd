@@ -113,9 +113,8 @@ func generate_platforms(multiplier: int, coords: Vector2, size: int, initailly_v
 
 	#set to invisible on start
 	set_chunk_visible(initailly_visible)
+	create_collision()
 	Utils.add_to_group_recursive(self, "speed_ramp")
-	if set_collision:
-		create_collision()
 
 
 #create collision
