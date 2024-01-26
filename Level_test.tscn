@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://dyhoggljhcsdk"]
+
+[ext_resource type="PackedScene" uid="uid://b7rsmaso6f0jv" path="res://Ball.tscn" id="1_eir6b"]
+[ext_resource type="Script" path="res://score.gd" id="2_0xyy7"]
+[ext_resource type="Script" path="res://InfiniteTerrain.gd" id="3_hygs2"]
+[ext_resource type="PackedScene" uid="uid://xxbd64a50fk1" path="res://ChunkTerrain.tscn" id="4_hlfky"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wiaf0"]
+sky_top_color = Color(0, 0.470588, 0.796078, 1)
+sky_horizon_color = Color(0, 0.603922, 0.909804, 1)
+ground_bottom_color = Color(0, 0.588235, 0.27451, 1)
+ground_horizon_color = Color(0.0705882, 0.607843, 0.505882, 1)
+
+[sub_resource type="Sky" id="Sky_lxm1k"]
+sky_material = SubResource("ProceduralSkyMaterial_wiaf0")
+
+[sub_resource type="Environment" id="Environment_atsvh"]
+background_mode = 2
+sky = SubResource("Sky_lxm1k")
+reflected_light_source = 1
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="Theme" id="Theme_680pe"]
+default_font_size = 44
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_niqrs"]
+frequency = 0.0006
+
+[node name="Level" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_atsvh")
+
+[node name="Ball" parent="." instance=ExtResource("1_eir6b")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="ScoreLabel" type="RichTextLabel" parent="."]
+clip_contents = false
+offset_right = 297.0
+offset_bottom = 384.0
+theme = SubResource("Theme_680pe")
+fit_content = true
+scroll_active = false
+autowrap_mode = 2
+script = ExtResource("2_0xyy7")
+
+[node name="InfiniteTerrain" type="Node3D" parent="." node_paths=PackedStringArray("viewer")]
+script = ExtResource("3_hygs2")
+viewer = NodePath("../Ball")
+chunk_mesh_scene = ExtResource("4_hlfky")
+noise = SubResource("FastNoiseLite_niqrs")
+terrain_height = 200

@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://xxbd64a50fk1"]
 
-[ext_resource type="Texture2D" uid="uid://7ij6g648mofe" path="res://textures/grass_1.png" id="1_frlgf"]
+[ext_resource type="Texture2D" uid="uid://fw1dpix60cly" path="res://textures/grass_1_512.png" id="1_3ut5f"]
 [ext_resource type="Script" path="res://ChunkTerrain.gd" id="1_reb1s"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kepwc"]
-albedo_texture = ExtResource("1_frlgf")
+albedo_texture = ExtResource("1_3ut5f")
 uv1_scale = Vector3(2, 2, 2)
 
 [node name="TerrainChunk" type="MeshInstance3D" groups=["ground"]]

@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://cxc4qgpj5kxwv"]
 
-[ext_resource type="Texture2D" uid="uid://dua6yggkgnkj6" path="res://textures/water_1.png" id="1_57qot"]
 [ext_resource type="Script" path="res://ChunkWater.gd" id="1_aighf"]
+[ext_resource type="Texture2D" uid="uid://c1qoxwxk0vg5s" path="res://textures/water_1_512.png" id="1_tl2v8"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ptl7"]
-albedo_texture = ExtResource("1_57qot")
+albedo_texture = ExtResource("1_tl2v8")
 uv1_scale = Vector3(5, 5, 5)
 
 [node name="ChunkWater" type="MeshInstance3D"]
