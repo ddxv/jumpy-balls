@@ -1,15 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b7rsmaso6f0jv"]
+[gd_scene load_steps=5 format=3 uid="uid://b7rsmaso6f0jv"]
 
 [ext_resource type="Script" path="res://ball.gd" id="1_ptpcq"]
-[ext_resource type="Texture2D" uid="uid://d0xs7f40ag8qe" path="res://textures/blue_ball_pixel_art.jpeg" id="2_bfqv3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e8uyb"]
 friction = 2.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_386sv"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p4o65"]
-albedo_texture = ExtResource("2_bfqv3")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_pdw4n"]
 
@@ -30,7 +26,6 @@ script = ExtResource("1_ptpcq")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MyBall"]
 mesh = SubResource("SphereMesh_386sv")
 skeleton = NodePath("../../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_p4o65")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MyBall"]
 shape = SubResource("SphereShape3D_pdw4n")

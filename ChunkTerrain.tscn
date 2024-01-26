@@ -10,8 +10,4 @@ uv1_scale = Vector3(2, 2, 2)
 [node name="TerrainChunk" type="MeshInstance3D" groups=["ground"]]
 material_override = SubResource("StandardMaterial3D_kepwc")
 script = ExtResource("1_reb1s")
-terrain_size = null
-resolution = null
-terrain_max_height = null
-chunk_lods = null
-lod_distances = null
+chunk_lods = Array[int]([2, 4, 8, 15, 20, 20])
